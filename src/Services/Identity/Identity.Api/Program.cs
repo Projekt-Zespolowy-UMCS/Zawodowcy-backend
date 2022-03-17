@@ -1,6 +1,9 @@
+using Identity.Api.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.ConfigureServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,5 +24,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.ConfigureDatabase();
 
 app.Run();
