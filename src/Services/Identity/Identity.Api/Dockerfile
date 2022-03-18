@@ -5,13 +5,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-COPY "Zawodowcy.Api.sln" "Zawodowcy.Api.sln"
+COPY "Zawodowcy.sln" "Zawodowcy.sln"
 
 COPY "src/Services/Identity/Identity.Api/Identity.Api.csproj" "src/Services/Identity/Identity.Api/Identity.Api.csproj"
 COPY "src/Services/Identity/Identity.Domain/Identity.Domain.csproj" "src/Services/Identity/Identity.Domain/Identity.Domain.csproj"
 COPY "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj" "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj"
 
-RUN dotnet restore "Zawodowcy.Api.sln"
+RUN dotnet restore "Zawodowcy.sln"
 
 COPY . .
 WORKDIR /src/Services/Identity/Identity.Api

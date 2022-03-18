@@ -29,7 +29,7 @@ public class ApplicationUser: IdentityUser
     protected ApplicationUser() {}
 
     public ApplicationUser(string street, string city, string state, CountryInfo country, string zipCode, string name,
-        string lastName)
+        string lastName, string email, string phoneNumber, string userName, string normalizedEmail, string normalizedUserName)
     {
         Street = street ?? throw new ArgumentNullException(nameof(street));
         City = city ?? throw new ArgumentNullException(nameof(city));
@@ -39,5 +39,10 @@ public class ApplicationUser: IdentityUser
         Name = name ?? throw new ArgumentNullException(nameof(name));
         LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
         CreationDate = new DateTime();
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+        NormalizedEmail = normalizedEmail ?? throw new ArgumentNullException(nameof(normalizedEmail));
+        UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+        NormalizedEmail = normalizedUserName ?? throw new ArgumentNullException(nameof(normalizedUserName));
     }
 }
