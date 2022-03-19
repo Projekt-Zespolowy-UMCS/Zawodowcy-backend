@@ -13,12 +13,12 @@ public static class ServicesConfiguration
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder app)
     {
         var connectionString = app.Configuration.GetConnectionString("IdentityDb");
-        var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+        var migrationsAssembly = "Identity.Infrastructure";
         app.Services.AddDbContext<AppIdentityDbContext>(options =>
             options.UseNpgsql(connectionString,
                 npgsqlOptionsAction: sqlOptions =>
                 {
-                    sqlOptions.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
+                    sqlOptions.MigrationsAssembly(migrationsAssembly);
                     //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
                 }));

@@ -1,7 +1,11 @@
 using Identity.Api.Configuration;
+using Identity.Api.Extensions;
+using Identity.Api.Utils;
+using Identity.Infrastructure.Data;
+using IdentityServer4.EntityFramework.DbContexts;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.ConfigureServices();
 

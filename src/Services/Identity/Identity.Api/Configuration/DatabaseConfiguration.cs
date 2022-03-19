@@ -1,4 +1,7 @@
+using Identity.Api.Extensions;
+using Identity.Api.Utils;
 using Identity.Infrastructure.Data;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Api.Configuration;
@@ -13,15 +16,20 @@ public static class DatabaseConfiguration
     
     private static void ApplyMigrations(WebApplication app)
     {
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-    
-            var context = services.GetRequiredService<IDbContextFactory<AppIdentityDbContext>>().CreateDbContext();
-            if (context.Database.GetPendingMigrations().Any())
+        app.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
+            .MigrateDbContext<AppIdentityDbContext>((context, services) =>
             {
-                context.Database.Migrate();
-            }
-        }
+                var logger = services.GetService<ILogger<AppIdentityDbContextSeed>>();
+
+                new AppIdentityDbContextSeed()
+                    .SeedAsync(context, logger)
+                    .Wait();
+            })
+            .MigrateDbContext<ConfigurationDbContext>((context, services) =>
+            {
+                new ConfigurationDbContextSeed()
+                    .SeedAsync(context, StartupUtils.GetConfiguration())
+                    .Wait();
+            });
     }
 }
