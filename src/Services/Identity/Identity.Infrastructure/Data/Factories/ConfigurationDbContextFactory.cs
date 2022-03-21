@@ -20,7 +20,6 @@ public class ConfigurationDbContextFactory: IDesignTimeDbContextFactory<Configur
             .Build();
         
         var optionsBuilder = new DbContextOptionsBuilder<ConfigurationDbContext>();
-        var storeOptions = new ConfigurationStoreOptions();
         
         optionsBuilder.UseNpgsql(config.GetConnectionString("IdentityDb"), options => options.MigrationsAssembly("Identity.Infrastructure"));
         return new ConfigurationDbContext(optionsBuilder.Options);

@@ -12,6 +12,7 @@ public static class ServicesConfiguration
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder app)
     {
+        
         var connectionString = app.Configuration.GetConnectionString("IdentityDb");
         var migrationsAssembly = "Identity.Infrastructure";
         app.Services.AddDbContext<AppIdentityDbContext>(options =>
