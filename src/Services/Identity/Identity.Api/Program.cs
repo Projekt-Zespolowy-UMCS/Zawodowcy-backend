@@ -2,6 +2,7 @@ using Identity.Api.Configuration;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
 using Identity.Infrastructure.Data;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,9 +37,17 @@ app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
 
-
 app.MapControllers();
 
 app.ConfigureDatabase();
+
+app.UseSpa(spa =>
+{
+    spa.Options.SourcePath = "client-ui";
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseReactDevelopmentServer("start");
+    }
+});
 
 app.Run();

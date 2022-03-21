@@ -57,6 +57,12 @@ public static class ServicesConfiguration
                             errorCodesToAdd: null);
                     });
             });
+
+        app.Services.AddSpaStaticFiles(config =>
+        {
+            config.RootPath = "client-ui";
+        });
+        
         return app;
     }
 }
