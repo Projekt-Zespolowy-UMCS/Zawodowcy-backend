@@ -1,5 +1,5 @@
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Options;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +22,6 @@ public class PersistedGrantDbContextFactory: IDesignTimeDbContextFactory<Persist
         var storeOptions = new OperationalStoreOptions();
         
         optionsBuilder.UseNpgsql(config.GetConnectionString("IdentityDb"), options => options.MigrationsAssembly("Identity.Infrastructure"));
-        return new PersistedGrantDbContext(optionsBuilder.Options, storeOptions);
+        return new PersistedGrantDbContext(optionsBuilder.Options);
     }
 }

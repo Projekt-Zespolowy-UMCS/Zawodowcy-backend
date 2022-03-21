@@ -1,5 +1,5 @@
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Options;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -23,6 +23,6 @@ public class ConfigurationDbContextFactory: IDesignTimeDbContextFactory<Configur
         var storeOptions = new ConfigurationStoreOptions();
         
         optionsBuilder.UseNpgsql(config.GetConnectionString("IdentityDb"), options => options.MigrationsAssembly("Identity.Infrastructure"));
-        return new ConfigurationDbContext(optionsBuilder.Options, storeOptions);
+        return new ConfigurationDbContext(optionsBuilder.Options);
     }
 }

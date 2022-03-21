@@ -1,7 +1,7 @@
+using Duende.IdentityServer.EntityFramework.DbContexts;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
 using Identity.Infrastructure.Data;
-using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Api.Configuration;

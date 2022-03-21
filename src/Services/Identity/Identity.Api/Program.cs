@@ -2,7 +2,6 @@ using Identity.Api.Configuration;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
 using Identity.Infrastructure.Data;
-using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,11 +24,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(config => config
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+);
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseIdentityServer();
+app.UseAuthorization();
+
 
 app.MapControllers();
 
