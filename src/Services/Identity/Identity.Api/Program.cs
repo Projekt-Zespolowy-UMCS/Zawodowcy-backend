@@ -41,13 +41,16 @@ app.MapControllers();
 
 app.ConfigureDatabase();
 
-app.UseSpa(spa =>
+app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
 {
-    spa.Options.SourcePath = "client-ui";
-    if (app.Environment.IsDevelopment())
+    builder.UseSpa(spa =>
     {
-        spa.UseReactDevelopmentServer("start");
-    }
+        spa.Options.SourcePath = "client-ui";
+        if (app.Environment.IsDevelopment())
+        {
+            spa.UseReactDevelopmentServer("start");
+        }
+    });
 });
 
 app.Run();
