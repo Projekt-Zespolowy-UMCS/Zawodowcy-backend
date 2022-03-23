@@ -12,7 +12,6 @@ public static class ServicesConfiguration
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder app)
     {
-        
         var connectionString = app.Configuration.GetConnectionString("IdentityDb");
         var migrationsAssembly = "Identity.Infrastructure";
         app.Services.AddDbContext<AppIdentityDbContext>(options =>
@@ -32,6 +31,7 @@ public static class ServicesConfiguration
             {
                 x.IssuerUri = "null";
                 x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                x.UserInteraction.LoginUrl = "/login";
             })
             .AddDeveloperSigningCredential()
             .AddAspNetIdentity<ApplicationUser>()

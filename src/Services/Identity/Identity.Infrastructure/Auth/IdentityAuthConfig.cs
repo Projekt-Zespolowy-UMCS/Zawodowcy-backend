@@ -33,12 +33,12 @@ public class IdentityAuthConfig
                 {
                     ClientId = "spa",
                     ClientName = "Zawodowcy SPA OpenId Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
-                    RedirectUris =           { $"{clientsUrl["Spa"]}/" },
-                    RequireConsent = false,
-                    PostLogoutRedirectUris = { $"{clientsUrl["Spa"]}/" },
-                    AllowedCorsOrigins =     { $"{clientsUrl["Spa"]}" },
+                    ClientSecrets = { new Secret("secret".Sha256())},
+                    RedirectUris =           { $"http://localhost:3000/" },
+                    RequireClientSecret = false,
+                    PostLogoutRedirectUris = { $"http://localhost:3000/" },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

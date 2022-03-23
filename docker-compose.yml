@@ -1,20 +1,30 @@
 version: '3.8'
-services:
 
-  react-app:
-    build: ./zawodowcy.client
-    container_name: react-app
+services:
+  IdentityDb:
+    container_name: 'ZawodowcyIdentity.Db'
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
-      - 3000:3000
-    links:
-      - aspnet-api
-  
-  aspnet-api:
-    build:
-      context: ./Zawodowcy.Api
-      dockerfile: /Zawodowcy.Api/Dockerfile
-    container_name: aspnet-api
-    ports:
-      - 8080:80
-      - 443:443
-  
+      - '5432:5432'
+    networks:
+      - zawodowcy
+
+  # ZawodowcyIdentity:
+  #   container_name: 'Zawodowcy.Identity'
+  #   image: 'zawodowcy.identity'
+  #   build:
+  #     context: .
+  #     dockerfile: src/Services/Identity/Identity.Api/Dockerfile
+  #   ports:
+  #     - "5006:5006"
+  #   depends_on:
+  #     - "IdentityDb"
+  #   networks:
+  #     - zawodowcy
+
+networks:
+  zawodowcy:
+    driver: bridge
