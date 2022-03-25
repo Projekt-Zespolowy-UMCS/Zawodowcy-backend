@@ -36,9 +36,11 @@ public class IdentityAuthConfig
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = { new Secret("secret".Sha256())},
-                    RedirectUris =           { $"http://localhost:3000/" },
+                    RedirectUris =           { $"http://localhost:3000/callback" },
                     RequireClientSecret = false,
+                    RequirePkce = true,
                     PostLogoutRedirectUris = { $"http://localhost:3000/" },
+                    AllowOfflineAccess = true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

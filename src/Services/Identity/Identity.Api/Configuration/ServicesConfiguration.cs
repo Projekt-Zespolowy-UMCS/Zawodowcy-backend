@@ -57,6 +57,7 @@ public static class ServicesConfiguration
                             errorCodesToAdd: null);
                     });
             });
+        
 
         app.Services.AddSpaStaticFiles(config =>
         {

@@ -1,18 +1,21 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createUserManager } from "redux-oidc"
+import {useSearchParams} from "react-router-dom";
 
 type FormValues = {
   username: string;
   password: string;
+  returnUrl: string | null
 };
 
 function Login() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const userManagerConfig = {
         authority: 'https://localhost:7234/',
         client_id: 'spa',
         redirect_uri: 'https://localhost:3000/',
-        post_logout_redirect_uri: 'http://localhost:8080',
+        post_logout_redirect_uri: 'http://localhost:3000/callback',
         response_type: 'token id_token',
         scope: 'openid profile',
         loadUserInfo: true,
@@ -37,6 +40,8 @@ function Login() {
         //     console.log('ERROR');
         //     console.log(error);
         // })
+        
+        data.returnUrl = searchParams.get("redirect_uri")
         var xhr = new XMLHttpRequest();
         xhr.addEventListener('load', () => {
             // update the state of the component with the result here

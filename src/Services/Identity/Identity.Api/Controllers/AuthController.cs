@@ -66,8 +66,6 @@ namespace idsserver
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
         {
-            model.ReturnUrl = "http://localhost:3000/";
-            
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             if (string.IsNullOrEmpty(model?.Username) || string.IsNullOrEmpty(model?.Password))
