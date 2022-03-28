@@ -9,6 +9,7 @@ public class ApplicationUser: IdentityUser
     public string Street { get; protected set; }
     public string City { get; protected set; }
     public string State { get; protected set; }
+    public int CountryId { get; protected set; }
     public CountryInfo Country { get; protected set; }
     public string ZipCode { get; protected set; }
     public string Name { get; protected set; }

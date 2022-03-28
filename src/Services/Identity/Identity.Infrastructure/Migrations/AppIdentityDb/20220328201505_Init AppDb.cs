@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
-    public partial class InitialAppIdentityDbMigration : Migration
+    public partial class InitAppDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,17 +25,17 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "CountryInfo",
+                name: "CountryInfos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ISO = table.Column<string>(type: "text", nullable: false),
+                    ISO = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CountryInfo", x => x.Id);
+                    table.PrimaryKey("PK_CountryInfos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,13 +64,14 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    Street = table.Column<string>(type: "text", nullable: false),
-                    City = table.Column<string>(type: "text", nullable: false),
-                    State = table.Column<string>(type: "text", nullable: false),
+                    Street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    State = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     CountryId = table.Column<int>(type: "integer", nullable: false),
-                    ZipCode = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
+                    ZipCode = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastUpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -91,9 +92,9 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_CountryInfo_CountryId",
+                        name: "FK_AspNetUsers_CountryInfos_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "CountryInfo",
+                        principalTable: "CountryInfos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -217,7 +218,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CountryId",
                 table: "AspNetUsers",
-                column: "CountryId");
+                column: "CountryId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -250,7 +252,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "CountryInfo");
+                name: "CountryInfos");
         }
     }
 }

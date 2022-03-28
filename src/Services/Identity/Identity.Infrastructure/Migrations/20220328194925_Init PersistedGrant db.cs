@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Identity.Infrastructure.Migrations
 {
-    public partial class InitialIdentityServerPersistedGrantDbMigration : Migration
+    public partial class InitPersistedGrantdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20220321095257_InitialAppIdentityDbMigration")]
-    partial class InitialAppIdentityDbMigration
+    [Migration("20220328201505_Init AppDb")]
+    partial class InitAppDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -42,6 +43,9 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<int>("CountryId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -52,7 +56,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -65,7 +70,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -89,11 +95,13 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
@@ -104,11 +112,13 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -130,7 +140,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.Property<string>("ISO")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -138,7 +149,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("CountryInfo");
+                    b.ToTable("CountryInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -276,8 +287,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", b =>
                 {
                     b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ValueObjects.CountryInfo", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
+                        .WithOne()
+                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", "CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
