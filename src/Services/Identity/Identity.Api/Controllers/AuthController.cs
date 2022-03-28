@@ -51,13 +51,6 @@ namespace idsserver
             this.grantStore = grantStore;
             this.logger = logger;
         }
-        
-        [Route("wtf")]
-        [HttpGet]
-        public async Task<int> wtf()
-        {
-            return 123;
-        }
 
         /// <summary>
         /// Handle postback from username/password login
