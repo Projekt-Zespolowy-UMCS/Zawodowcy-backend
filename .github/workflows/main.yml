@@ -10,8 +10,8 @@ on:
       - main
 
 env:
-  DOCKER_APP_CONTEXT: ./src/Zawodowcy.Api
-  DOCKER_DOCKERFILE: ./src/Zawodowcy.Api/Zawodowcy.Api/Dockerfile
+  DOCKER_APP_CONTEXT: ./src/Services/Identity/Identity.Api
+  DOCKER_DOCKERFILE: ./src/Services/Identity/Identity.Api/Dockerfile
   DOCKER_IMAGE_NAME: api
   DOCKER_PROJECT_NAME: api
   IMAGE_REGISTRY_URL: docker.pkg.github.com
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Test application
         run: |
-          cd src/Zawodowcy.Api
+          cd src/Services/Identity/Identity.Api
           dotnet test --no-restore --verbosity normal
   
   build:
