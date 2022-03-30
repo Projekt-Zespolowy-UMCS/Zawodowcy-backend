@@ -1,3 +1,4 @@
+using FluentValidation;
 using Identity.Domain.Base;
 
 namespace Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
@@ -16,5 +17,7 @@ public class CountryInfo: BaseEntity
     {
         ISO = country ?? throw new ArgumentException(nameof(country));
         Name = region ?? throw new ArgumentException(nameof(region));
+
+        new CountryInfoValidator().ValidateAndThrow(this);
     }
 }

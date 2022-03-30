@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using FluentValidation;
 using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,17 +13,17 @@ public class ApplicationUser: IdentityUser
     public int CountryId { get; protected set; }
     public CountryInfo Country { get; protected set; }
     public string ZipCode { get; protected set; }
-    public string Name { get; protected set; }
+    public string FirstName { get; protected set; }
     public string LastName { get; protected set; }
 
     [NotMapped]
     public string FullName
     {
-        get => $"{Name} {LastName}";
+        get => $"{FirstName} {LastName}";
     }
 
     public DateTime CreationDate { get; }
-    public DateTime LastUpdatedDate { get; protected set; }
+    public DateTime? LastUpdatedDate { get; protected set; }
 
     /// <summary>
     /// For Entity Framework purposes
@@ -37,7 +38,7 @@ public class ApplicationUser: IdentityUser
         State = state ?? throw new ArgumentNullException(nameof(state));
         Country = country ?? throw new ArgumentNullException(nameof(country));
         ZipCode = zipCode ?? throw new ArgumentNullException(nameof(zipCode));
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+        FirstName = name ?? throw new ArgumentNullException(nameof(name));
         LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
         CreationDate = new DateTime();
         Email = email ?? throw new ArgumentNullException(nameof(email));
@@ -45,5 +46,7 @@ public class ApplicationUser: IdentityUser
         NormalizedEmail = normalizedEmail ?? throw new ArgumentNullException(nameof(normalizedEmail));
         UserName = userName ?? throw new ArgumentNullException(nameof(userName));
         NormalizedEmail = normalizedUserName ?? throw new ArgumentNullException(nameof(normalizedUserName));
+
+        new ApplicationUserValidator().ValidateAndThrow(this);
     }
 }

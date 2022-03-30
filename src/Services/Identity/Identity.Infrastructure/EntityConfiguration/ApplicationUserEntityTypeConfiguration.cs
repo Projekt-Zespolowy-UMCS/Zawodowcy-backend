@@ -19,7 +19,7 @@ public class ApplicationUserEntityTypeConfiguration : IEntityTypeConfiguration<A
             .HasMaxLength(100);
 
         builder
-            .Property(user => user.Name)
+            .Property(user => user.FirstName)
             .IsRequired(true)
             .HasMaxLength(100);
         builder
