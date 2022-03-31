@@ -2,9 +2,9 @@ using FluentValidation;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
 
-namespace Identity.Application.DTO.Auth;
+namespace Identity.Application.DTO.RegisteringUser;
 
-public class RegisterApplicationUserDtoValidator: AbstractValidator<ApplicationUser>
+public class RegisterApplicationUserDtoValidator: AbstractValidator<RegisterApplicationUserDto>
 {
     public RegisterApplicationUserDtoValidator()
     {
@@ -16,10 +16,10 @@ public class RegisterApplicationUserDtoValidator: AbstractValidator<ApplicationU
             .Matches("^[a-zA-Z\\u{0080}-\\u{024F}\\s\\/\\-\\)\\(\\`\\.\\\"\\']*$")
             .WithMessage("There are illegal characters in city name.");
 
-        RuleFor(u => u.Country)
+        RuleFor(u => u.CountryInfo)
             .NotNull()
             .WithMessage("Country cannot be null.")
-            .SetValidator(new CountryInfoValidator());
+            .SetValidator(new CountryInfoDtoValidator());
 
         RuleFor(u => u.FirstName)
             .NotEmpty()
@@ -55,16 +55,5 @@ public class RegisterApplicationUserDtoValidator: AbstractValidator<ApplicationU
             .MaximumLength(ApplicationUserEntityValidationConstants.ZipCodeMaxLength)
             .WithMessage(
                 $"ZipCode exceeds maximum length of {ApplicationUserEntityValidationConstants.ZipCodeMaxLength} characters");
-
-        RuleFor(u => u.CreationDate)
-            .LessThanOrEqualTo(DateTime.Now)
-            .WithMessage("Creation date is invalid. It cannot be set in the future.");
-
-        When(u => u.LastUpdatedDate != null, () =>
-        {
-            RuleFor(u => u.CreationDate)
-                .LessThanOrEqualTo(u => u.LastUpdatedDate)
-                .WithMessage("Last update date is invalid. It cannot be set before Creation date.");
-        });
     }
 }

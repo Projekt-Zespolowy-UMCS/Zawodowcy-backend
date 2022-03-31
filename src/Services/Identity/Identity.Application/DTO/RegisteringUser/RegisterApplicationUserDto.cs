@@ -1,4 +1,4 @@
-namespace Identity.Application.DTO.Auth;
+namespace Identity.Application.DTO.RegisteringUser;
 
 public class RegisterApplicationUserDto
 {
