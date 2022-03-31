@@ -14,8 +14,6 @@ public class CountryInfoValidator: AbstractValidator<CountryInfo>
             .NotNull()
             .WithMessage("Country ISO cannot be empty.")
             .Length(CountryInfoEntityValidationConstants.CountryISOCodeLength)
-            .WithMessage("Country ISO has to be in three characters length.")
-            .Matches("^[A-Z]{3}$")
-            .WithMessage("Country ISO is invalid.");
+            .WithMessage("Country ISO has to be in three characters length.");
     }
 }

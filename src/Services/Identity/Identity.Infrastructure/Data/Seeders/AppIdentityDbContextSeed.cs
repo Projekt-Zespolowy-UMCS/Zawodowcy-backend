@@ -1,8 +1,10 @@
 using System.Globalization;
+using System.Security.Cryptography.Xml;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -19,11 +21,8 @@ public class AppIdentityDbContextSeed
 
         try
         {
-            if (!context.Users.Any())
-            {
-                await context.Users.AddRangeAsync(GetDefaultUser());
-                await context.SaveChangesAsync();
-            }
+            SeedUsers(context);
+            SeedCountries(context);
         }
         catch (Exception ex)
         {
@@ -33,6 +32,24 @@ public class AppIdentityDbContextSeed
                 logger.LogError(ex, $"Unable to seed {nameof(AppIdentityDbContext)}");
                 await SeedAsync(context, logger, retryCounter);
             }
+        }
+    }
+
+    private async Task SeedUsers(AppIdentityDbContext context)
+    {
+        if (!context.Users.Any())
+        {
+            await context.Users.AddRangeAsync(GetDefaultUser());
+            await context.SaveChangesAsync();
+        }
+    }
+    
+    private async Task SeedCountries(AppIdentityDbContext context)
+    {
+        if (!context.CountryInfos.Any())
+        {
+            await context.CountryInfos.AddRangeAsync(GetCountriesList());
+            await context.SaveChangesAsync();
         }
     }
 
@@ -59,5 +76,27 @@ public class AppIdentityDbContextSeed
         {
             user
         };
+    }
+
+    private IEnumerable<CountryInfo> GetCountriesList()
+    {
+        var cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+        IEnumerable<CountryInfo> countries = new List<CountryInfo>();
+        foreach (var culture in cultures)
+        {
+            var region = new RegionInfo(culture.Name);
+            if (IsCountryValid(countries, region.ThreeLetterISORegionName, region.EnglishName))
+                countries = countries.Append(new CountryInfo(region.ThreeLetterISORegionName, region.EnglishName));
+        }
+
+        countries = countries.OrderBy(x => x.Name);
+        return countries;
+    }
+
+    private bool IsCountryValid(IEnumerable<CountryInfo> countries, string iso, string name)
+    {
+        return iso != String.Empty && 
+               name != String.Empty && 
+               countries.All(c => c.Name != name && c.ISO != iso);
     }
 }

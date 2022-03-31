@@ -9,8 +9,9 @@ public class ApplicationUserMapper: IMapper<ApplicationUser, RegisterApplication
 {
     public readonly IMapper<CountryInfo, CountryInfoDto> _countryMapper;
 
-    public ApplicationUserMapper(IMapper<CountryInfo, CountryInfoDto> mapper)
+    public ApplicationUserMapper(IMapper<CountryInfo, CountryInfoDto> countryMapper)
     {
+        _countryMapper = countryMapper;
     }
     
     public ApplicationUser MapToEntity(RegisterApplicationUserDto dto)

@@ -147,7 +147,7 @@ namespace idsserver
                 return BadRequest(ModelState);
 
             var newUser = _userMapper.MapToEntity(dto);
-            var result = await _usermanager.CreateAsync(newUser, newUser.PasswordHash);
+            var result = await _usermanager.CreateAsync(newUser, dto.Password);
             if (result.Succeeded)
             {
                 return Ok();
