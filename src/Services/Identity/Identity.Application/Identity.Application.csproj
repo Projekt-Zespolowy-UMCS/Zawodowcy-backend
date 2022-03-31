@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
-      <ProjectReference Include="..\src\Services\Identity\Identity.Domain\Identity.Domain.csproj" />
     </ItemGroup>
 
 </Project>

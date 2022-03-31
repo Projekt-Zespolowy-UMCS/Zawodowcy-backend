@@ -7,6 +7,9 @@ using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Identity;
 using Duende.IdentityServer.Extensions;
 using Identity.Api.DTO;
+using Identity.Application.DTO.RegisteringUser;
+using Identity.Application.Mappers;
+using Identity.Application.Mappers.UserMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,9 +25,10 @@ namespace idsserver
         private readonly IEventService _events;
         private readonly SignInManager<ApplicationUser> _manager;
         private readonly UserManager<ApplicationUser> _usermanager;
-        private readonly IPersistedGrantService grantService;
-        private readonly IPersistedGrantStore grantStore;
-        private readonly ILogger<AuthController> logger;
+        private readonly IPersistedGrantService _grantService;
+        private readonly IPersistedGrantStore _grantStore;
+        private readonly ILogger<AuthController> _logger;
+        private readonly IMapper<ApplicationUser, RegisterApplicationUserDto> _userMapper;
 
         public AuthController(
             IIdentityServerInteractionService interaction,
@@ -35,7 +39,8 @@ namespace idsserver
             UserManager<ApplicationUser> usermanager,
             IPersistedGrantService grantService,
             IPersistedGrantStore grantStore,
-            ILogger<AuthController> logger)
+            ILogger<AuthController> logger,
+            IMapper<ApplicationUser, RegisterApplicationUserDto> userMapper)
         {
             _interaction = interaction;
             _clientStore = clientStore;
@@ -43,9 +48,10 @@ namespace idsserver
             _events = events;
             _manager = manager;
             _usermanager = usermanager;
-            this.grantService = grantService;
-            this.grantStore = grantStore;
-            this.logger = logger;
+            _grantService = grantService;
+            _grantStore = grantStore;
+            _logger = logger;
+            _userMapper = userMapper;
         }
 
         /// <summary>
@@ -129,6 +135,26 @@ namespace idsserver
             await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
             return BadRequest("Something went wrong");
         }
+        
+        /// <summary>
+        /// Register new user
+        /// </summary>
+        [Route("register")]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterApplicationUserDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var newUser = _userMapper.MapToEntity(dto);
+            var result = await _usermanager.CreateAsync(newUser, newUser.PasswordHash);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return StatusCode(500);
+        }
 
         /// <summary>
         /// End all refresh tokens for the logged in user, accept the current on
@@ -143,20 +169,20 @@ namespace idsserver
                 // get user id (which is the SubjectID)
                 var subjectId = User.Identity.GetSubjectId();
                 var user = await this._usermanager.FindByIdAsync(subjectId);
-                this.logger.LogInformation($"end all other session for user {user.Email} with subject Id {subjectId}");
+                this._logger.LogInformation($"end all other session for user {user.Email} with subject Id {subjectId}");
 
                 // get the current SessionID for this user
                 var result = await HttpContext.AuthenticateAsync();
                 var sid = result.Properties.Items.FirstOrDefault(x => x.Key == "session_id").Value;
-                this.logger.LogInformation($"current Session ID is {sid}");
+                this._logger.LogInformation($"current Session ID is {sid}");
 
                 // get all for this user
-                var allSessions = await this.grantStore.GetAllAsync(new PersistedGrantFilter
+                var allSessions = await this._grantStore.GetAllAsync(new PersistedGrantFilter
                 {
                     SubjectId = subjectId
                 });
 
-                this.logger.LogInformation($"this user has {allSessions.Count()} sessions");
+                this._logger.LogInformation($"this user has {allSessions.Count()} sessions");
                 foreach (var s in allSessions)
                 {
                     var data = s.Data;
@@ -164,15 +190,15 @@ namespace idsserver
                     {
                         // remove the session 
                         // when we hook this into DB, it will result in 1 call to the DB
-                        await this.grantService.RemoveAllGrantsAsync(subjectId, s.ClientId, s.SessionId);
-                        this.logger.LogInformation($"killed session Id {s.SessionId}, client ID: {s.ClientId}");
+                        await this._grantService.RemoveAllGrantsAsync(subjectId, s.ClientId, s.SessionId);
+                        this._logger.LogInformation($"killed session Id {s.SessionId}, client ID: {s.ClientId}");
                     }
                 }
 
                 //  this will make sure that all other sessions are killed
 
                 await this._usermanager.UpdateSecurityStampAsync(user);
-                this.logger.LogInformation($"update Security Stampt");
+                this._logger.LogInformation($"update Security Stampt");
             }
             return Ok();
         }
@@ -191,8 +217,8 @@ namespace idsserver
                 // get user id (which is the SubjectID)
                 var subjectId = User.Identity.GetSubjectId();
                 var user = await this._usermanager.FindByIdAsync(subjectId);
-                this.logger.LogInformation($"end all other session for user {user.Email} with subject Id {subjectId}");
-                await this.grantService.RemoveAllGrantsAsync(subjectId);
+                this._logger.LogInformation($"end all other session for user {user.Email} with subject Id {subjectId}");
+                await this._grantService.RemoveAllGrantsAsync(subjectId);
                 
                 //  this will make sure that all other sessions are killed
                 await this._usermanager.UpdateSecurityStampAsync(user);
@@ -200,6 +226,7 @@ namespace idsserver
             return Ok();
         }
 
+        [Route("validateSecurityStamp")]
         [HttpGet]
         public async Task<IActionResult> ValidateSecurityStamp()
         {

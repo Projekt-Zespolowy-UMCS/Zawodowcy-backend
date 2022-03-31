@@ -5,7 +5,7 @@ using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
 
 namespace Identity.Application.Mappers.UserMapper;
 
-public class ApplicationUserMapper: IUserMapper<ApplicationUser, RegisterApplicationUserDto>
+public class ApplicationUserMapper: IMapper<ApplicationUser, RegisterApplicationUserDto>
 {
     public readonly IMapper<CountryInfo, CountryInfoDto> _countryMapper;
 
