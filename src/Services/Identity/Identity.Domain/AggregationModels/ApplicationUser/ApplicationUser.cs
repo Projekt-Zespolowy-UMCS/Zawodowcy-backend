@@ -30,22 +30,20 @@ public class ApplicationUser: IdentityUser
     /// </summary>
     protected ApplicationUser() {}
 
-    public ApplicationUser(string street, string city, string state, CountryInfo country, string zipCode, string name,
-        string lastName, string email, string phoneNumber, string userName, string normalizedEmail, string normalizedUserName)
+    public ApplicationUser(string street, string city, string state, CountryInfo country, string zipCode, string firstName,
+        string lastName, string email, string phoneNumber, string userName)
     {
         Street = street ?? throw new ArgumentNullException(nameof(street));
         City = city ?? throw new ArgumentNullException(nameof(city));
         State = state ?? throw new ArgumentNullException(nameof(state));
         Country = country ?? throw new ArgumentNullException(nameof(country));
         ZipCode = zipCode ?? throw new ArgumentNullException(nameof(zipCode));
-        FirstName = name ?? throw new ArgumentNullException(nameof(name));
+        FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
         LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
         CreationDate = new DateTime();
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-        NormalizedEmail = normalizedEmail ?? throw new ArgumentNullException(nameof(normalizedEmail));
         UserName = userName ?? throw new ArgumentNullException(nameof(userName));
-        NormalizedEmail = normalizedUserName ?? throw new ArgumentNullException(nameof(normalizedUserName));
 
         new ApplicationUserValidator().ValidateAndThrow(this);
     }

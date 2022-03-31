@@ -1,6 +1,6 @@
-namespace idsserver
+namespace Identity.Api.DTO
 {
-    public class LoginRequestDTO
+    public class LoginRequestDto
     {
         public string Username { get; set; }
         public string Password { get; set; }

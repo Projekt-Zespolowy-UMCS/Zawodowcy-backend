@@ -13,10 +13,10 @@ public class CountryInfo: BaseEntity
     /// </summary>
     private CountryInfo() {}
     
-    public CountryInfo(string country, string region)
+    public CountryInfo(string iso, string name)
     {
-        ISO = country ?? throw new ArgumentException(nameof(country));
-        Name = region ?? throw new ArgumentException(nameof(region));
+        ISO = iso ?? throw new ArgumentException(nameof(iso));
+        Name = name ?? throw new ArgumentException(nameof(name));
 
         new CountryInfoValidator().ValidateAndThrow(this);
     }

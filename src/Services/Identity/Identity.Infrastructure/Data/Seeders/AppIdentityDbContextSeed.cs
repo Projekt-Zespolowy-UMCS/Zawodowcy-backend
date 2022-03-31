@@ -51,9 +51,7 @@ public class AppIdentityDbContextSeed
                 "Daniluk",
                 "test@test.com",
                 "123456789",
-                "test@test.com",
-                "TEST@TEST.COM",
-                "TEST@TEST.COM");
+                "test@test.com");
 
         user.PasswordHash = _passwordHasher.HashPassword(user, "Pass@word1");
 

@@ -17,6 +17,5 @@ public class CountryInfoValidator: AbstractValidator<CountryInfo>
             .WithMessage("Country ISO has to be in three characters length.")
             .Matches("^[A-Z]{3}$")
             .WithMessage("Country ISO is invalid.");
-
     }
 }
