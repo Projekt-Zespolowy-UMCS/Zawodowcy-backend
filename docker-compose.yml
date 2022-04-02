@@ -13,7 +13,7 @@ services:
       - zawodowcy
 
   # ZawodowcyIdentity:
-  #   container_name: 'Zawodowcy.Identity'
+  #   container_name: 'Zawodowcy.Identity' 
   #   image: 'zawodowcy.identity'
   #   build:
   #     context: .

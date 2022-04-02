@@ -13,7 +13,7 @@ public class ApplicationUserValidator: AbstractValidator<ApplicationUser>
             .WithMessage("City cannot be empty.")
             .MaximumLength(ApplicationUserEntityValidationConstants.CityMaxLength)
             .WithMessage($"Maximum length of city name is {ApplicationUserEntityValidationConstants.CityMaxLength} characters.")
-            .Matches("^[a-zA-Z\\u{0080}-\\u{024F}\\s\\/\\-\\)\\(\\`\\.\\\"\\']*$")
+            .Matches("^[a-zA-Z\\u0080-\\u024F.]+((?:[ -.|'])[a-zA-Z\\u0080-\\u024F]+)*$")
             .WithMessage("There are illegal characters in city name.");
 
         RuleFor(u => u.Country)

@@ -1,7 +1,9 @@
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
+using Identity.Domain.AggregationModels.ApplicationUser;
 using Identity.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Api.Configuration;
@@ -19,10 +21,8 @@ public static class DatabaseConfiguration
         app.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
             .MigrateDbContext<AppIdentityDbContext>((context, services) =>
             {
-                var logger = services.GetService<ILogger<AppIdentityDbContextSeed>>();
-
                 new AppIdentityDbContextSeed()
-                    .SeedAsync(context, logger)
+                    .SeedAsync(services)
                     .Wait();
             })
             .MigrateDbContext<ConfigurationDbContext>((context, services) =>

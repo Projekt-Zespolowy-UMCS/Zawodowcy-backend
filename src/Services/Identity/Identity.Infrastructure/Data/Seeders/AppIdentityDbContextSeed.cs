@@ -5,6 +5,7 @@ using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -13,39 +14,39 @@ namespace Identity.Infrastructure.Data;
 public class AppIdentityDbContextSeed
 {
     public readonly PasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
-
-    public async Task SeedAsync(AppIdentityDbContext context,
-        ILogger<AppIdentityDbContextSeed> logger, int? retry = 0)
+    public async Task SeedAsync(IServiceProvider serviceProvider, int? retry = 0)
     {
         int retryCounter = retry.Value;
 
         try
         {
-            SeedUsers(context);
-            SeedCountries(context);
+            SeedUsers(serviceProvider);
+            SeedCountries(serviceProvider);
         }
         catch (Exception ex)
         {
             if (retryCounter < 10)
             {
                 retryCounter++;
-                logger.LogError(ex, $"Unable to seed {nameof(AppIdentityDbContext)}");
-                await SeedAsync(context, logger, retryCounter);
+                await SeedAsync(serviceProvider, retryCounter);
             }
         }
     }
 
-    private async Task SeedUsers(AppIdentityDbContext context)
+    private async Task SeedUsers(IServiceProvider serviceProvider)
     {
-        if (!context.Users.Any())
+        using var scopes = serviceProvider.CreateScope();
+        var userManager = scopes.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        if (!userManager.Users.Any())
         {
-            await context.Users.AddRangeAsync(GetDefaultUser());
-            await context.SaveChangesAsync();
+            await userManager.CreateAsync(GetDefaultUser(), "Pass@word1");
         }
     }
     
-    private async Task SeedCountries(AppIdentityDbContext context)
+    private async Task SeedCountries(IServiceProvider serviceProvider)
     {
+        using var scopes = serviceProvider.CreateScope();
+        var context = scopes.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
         if (!context.CountryInfos.Any())
         {
             await context.CountryInfos.AddRangeAsync(GetCountriesList());
@@ -53,7 +54,7 @@ public class AppIdentityDbContextSeed
         }
     }
 
-    private IEnumerable<ApplicationUser> GetDefaultUser()
+    private ApplicationUser GetDefaultUser()
     {
         var regionInfo = new RegionInfo("PL");
 
@@ -72,10 +73,7 @@ public class AppIdentityDbContextSeed
 
         user.PasswordHash = _passwordHasher.HashPassword(user, "Pass@word1");
 
-        return new List<ApplicationUser>()
-        {
-            user
-        };
+        return user;
     }
 
     private IEnumerable<CountryInfo> GetCountriesList()
