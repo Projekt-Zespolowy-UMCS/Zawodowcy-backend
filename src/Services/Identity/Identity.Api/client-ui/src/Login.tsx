@@ -41,7 +41,7 @@ function Login() {
         //     console.log(error);
         // })
         
-        data.returnUrl = searchParams.get("redirect_uri")
+        data.returnUrl = userManagerConfig.post_logout_redirect_uri;
         var xhr = new XMLHttpRequest();
         xhr.addEventListener('load', () => {
             // update the state of the component with the result here
