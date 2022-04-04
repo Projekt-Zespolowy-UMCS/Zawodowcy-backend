@@ -118,8 +118,9 @@ public static class ServicesConfiguration
         app.Services.AddIdentityServer(x =>
             {
                 x.IssuerUri = "null";
-                x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                x.Authentication.CookieLifetime = TimeSpan.FromSeconds(5);
                 x.UserInteraction.LoginUrl = "/login";
+                x.UserInteraction.LogoutUrl = "/logout/";
             })
             .AddDeveloperSigningCredential()
             .AddAspNetIdentity<ApplicationUser>()

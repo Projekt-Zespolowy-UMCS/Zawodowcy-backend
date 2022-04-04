@@ -1,70 +1,91 @@
-import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { createUserManager } from "redux-oidc"
-import {useSearchParams} from "react-router-dom";
+import React, { FC, useReducer } from "react";
+import { useSearchParams } from "react-router-dom";
+import AuthService from "./services/auth-service";
 
-type FormValues = {
+type State = {
   username: string;
   password: string;
-  returnUrl: string | null
 };
 
-function Login() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const userManagerConfig = {
-        authority: 'https://localhost:7234/',
-        client_id: 'spa',
-        redirect_uri: 'https://localhost:3000/',
-        post_logout_redirect_uri: 'http://localhost:3000/callback',
-        response_type: 'token id_token',
-        scope: 'openid profile',
-        loadUserInfo: true,
-        monitorSession: false
-    }
-    
-    const userManager = createUserManager(userManagerConfig)
+const initialState: State = {
+  username: '',
+  password: ''
+}
 
-    function signIn() {
-        return userManager.signinRedirect()
+type Action = { type: 'setUsername', payload: string }
+  | { type: 'setPassword', payload: string };
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'setUsername':
+      return {
+        ...state,
+        username: action.payload
+      };
+    case 'setPassword':
+      return {
+        ...state,
+        password: action.payload
+      };
+  }
+}
+export const Login: FC = () => {
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const returnUrl = searchParams.get("ReturnUrl");
+  console.log(returnUrl);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const data = {
+      username: state.username,
+      password: state.password,
+      returnUrl: returnUrl
     }
-    
-    const { register, handleSubmit } = useForm<FormValues>();
-    const onSubmit: SubmitHandler<FormValues> = (data, event) => {
-        // event?.preventDefault();
-        // console.log(data);
-        // signIn();
-        // userManager.getUser().then((user) => {
-        //     console.log('THEN');
-        //     console.log(user)
-        // }).catch(error => {
-        //     console.log('ERROR');
-        //     console.log(error);
-        // })
-        
-        data.returnUrl = userManagerConfig.post_logout_redirect_uri;
-        var xhr = new XMLHttpRequest();
-        xhr.addEventListener('load', () => {
-            // update the state of the component with the result here
-            console.log(xhr.responseText)
-            window.location.href = "https://localhost:7234";
-          });
-          // xhr.open('GET', 'https://localhost:7234/api/auth/login');
-          // xhr.send();
-            // open the request with the verb and the url
-        xhr.open('POST', 'https://localhost:7234/api/auth/login')
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        // end the request
-        xhr.send(JSON.stringify(data));// // s
+
+    AuthService.login(data).then(
+      response => {
+        console.log("Response: ", response);
+        window.location.href = response.returnUrl;
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        console.log(resMessage);
+      }
+    )
+
+  }
+  const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> =
+    (event) => {
+      dispatch({
+        type: 'setUsername',
+        payload: event.target.value
+      });
+    };
+
+  const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> =
+    (event) => {
+      dispatch({
+        type: 'setPassword',
+        payload: event.target.value
+      });
     }
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <p>user</p>
-        <input {...register("username")} />
-        <p>password</p>
-        <input {...register("password")} />
+
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <input type="email" id="username" placeholder="Enter email" onChange={handleUsernameChange} />
+        <input type="password" id="password" placeholder="enter password here" onChange={handlePasswordChange} />
         <input type="submit" />
       </form>
-    );
+    </>
+  )
 }
 
 export default Login;

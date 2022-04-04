@@ -14,7 +14,7 @@ using Identity.Domain.AggregationModels.ApplicationUser;
 using Microsoft.EntityFrameworkCore;
 
 namespace idsserver
-{   
+{
     [Route("api/[controller]")]
     [AllowAnonymous]
     public class AuthController : Controller
@@ -135,7 +135,7 @@ namespace idsserver
             await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
             return BadRequest("Something went wrong");
         }
-        
+
         /// <summary>
         /// Register new user
         /// </summary>
@@ -219,7 +219,7 @@ namespace idsserver
                 var user = await this._usermanager.FindByIdAsync(subjectId);
                 this._logger.LogInformation($"end all other session for user {user.Email} with subject Id {subjectId}");
                 await this._grantService.RemoveAllGrantsAsync(subjectId);
-                
+
                 //  this will make sure that all other sessions are killed
                 await this._usermanager.UpdateSecurityStampAsync(user);
             }
@@ -237,6 +237,37 @@ namespace idsserver
                 return Ok(validationResponse == null ? "empty" : "not_empty");
             }
             return Ok("nothing");
+        }
+
+        [HttpGet]
+        [Route("logout")]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            var context = await _interaction.GetLogoutContextAsync(logoutId);
+            bool showSignoutPrompt = true;
+
+            if (context?.ShowSignoutPrompt == false)
+            {
+                // it's safe to automatically sign-out
+                showSignoutPrompt = true;
+            }
+
+            if (User?.Identity.IsAuthenticated == true)
+            {
+                // delete local authentication cookie
+                await HttpContext.SignOutAsync();
+                
+            }
+
+            // no external signout supported for now (see \Quickstart\Account\AccountController.cs TriggerExternalSignout)
+            return Ok(new
+            {
+                showSignoutPrompt,
+                ClientName = string.IsNullOrEmpty(context?.ClientName) ? context?.ClientId : context?.ClientName,
+                context?.PostLogoutRedirectUri,
+                context?.SignOutIFrameUrl,
+                logoutId
+            });
         }
 
     }
