@@ -45,7 +45,7 @@ function Logout() {
             .then(response => {
                 console.log("Response: ", response.postLogoutRedirectUri, response);
                 setIframe(response.signOutIFrameUrl)
-                window.location.href = response.postLogoutRedirectUri;
+                window.location.href = response.postLogoutRedirectUri || "/";
             })
             .catch(error => {
                 const resMessage =

@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Threading.Tasks;
+using Duende.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +15,7 @@ using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace idsserver
 {
@@ -243,6 +247,19 @@ namespace idsserver
         [Route("logout")]
         public async Task<IActionResult> Logout(string logoutId)
         {
+
+           /* await _manager.SignOutAsync();
+
+            var logoutRequest = _interaction.GetLogoutContextAsync(logoutId);
+
+            if (string.IsNullOrEmpty(logoutRequest.PostLogoutRedirectUri))
+            {
+                //return RedirectToAction("/", "")
+            }
+            
+            */
+
+            
             var context = await _interaction.GetLogoutContextAsync(logoutId);
             bool showSignoutPrompt = true;
 
@@ -255,7 +272,7 @@ namespace idsserver
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await HttpContext.SignOutAsync();
+                await _manager.SignOutAsync();
                 
             }
 
@@ -268,6 +285,7 @@ namespace idsserver
                 context?.SignOutIFrameUrl,
                 logoutId
             });
+            
         }
 
     }
