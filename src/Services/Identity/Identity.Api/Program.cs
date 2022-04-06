@@ -43,11 +43,12 @@ app.ConfigureDatabase();
 
 app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
 {
+    builder.UseSpaStaticFiles();
     builder.UseSpa(spa =>
     {
-        spa.Options.SourcePath = "client-ui";
         if (app.Environment.IsDevelopment())
         {
+            spa.Options.SourcePath = "client-ui";
             spa.UseReactDevelopmentServer("start");
         }
     });

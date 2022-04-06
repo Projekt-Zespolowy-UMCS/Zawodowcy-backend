@@ -164,7 +164,14 @@ public static class ServicesConfiguration
     {
         app.Services.AddSpaStaticFiles(config =>
         {
-            config.RootPath = "client-ui";
+            if (app.Environment.IsDevelopment())
+            {
+                config.RootPath = "client-ui";
+            }
+            else
+            {
+                config.RootPath = "client-ui/build";
+            }
         });
         return app;
     }
