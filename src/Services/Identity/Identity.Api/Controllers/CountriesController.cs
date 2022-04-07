@@ -21,13 +21,28 @@ public class CountriesController : ControllerBase
     
     [Route("all")]
     [HttpGet]
-    public async Task<IEnumerable<CountryInfoDto>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var countries = await _countryRepository.GetAllAsync();
         var countriesDto = countries
             .Select(x => _mapper.Map<CountryInfoDto>(x))
             .OrderBy(x => x.Name);
-        return countriesDto;
+        return Ok(countriesDto);
     }
-    
+
+    public async Task<IActionResult> Get(int id)
+    {
+        var country = await _countryRepository.GetAsync(id);
+        if (country != null)
+            return Ok(country);
+        return NotFound("There is no country with that id.");
+    }
+
+    public async Task<IActionResult> Get(string iso)
+    {
+        var country = await _countryRepository.GetAsync(iso);
+        if (country != null)
+            return Ok(country);
+        return NotFound("There is no country with that ISO code.");
+    }
 }
