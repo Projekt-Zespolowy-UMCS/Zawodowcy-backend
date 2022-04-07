@@ -14,17 +14,17 @@ public class CountryRepository : ICountryRepository
         _context = context;
     }
     
-    public async Task<IEnumerable<CountryInfo>> GetAll()
+    public async Task<IEnumerable<CountryInfo>> GetAllAsync()
     {
         return await _context.CountryInfos.ToListAsync();
     }
 
-    public async Task<CountryInfo?> Get(int id)
+    public async Task<CountryInfo?> GetAsync(int id)
     {
         return await _context.CountryInfos.FirstOrDefaultAsync(ctr => ctr.Id == id);
     }
 
-    public async Task<CountryInfo?> Get(string iso)
+    public async Task<CountryInfo?> GetAsync(string iso)
     {
         return await _context.CountryInfos.FirstOrDefaultAsync(ctr => ctr.ISO == iso);
 

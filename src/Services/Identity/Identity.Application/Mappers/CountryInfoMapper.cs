@@ -9,4 +9,9 @@ public class CountryInfoMapper: IMapper<CountryInfo, CountryInfoDto>
     {
         return new CountryInfo(dto.Name, dto.ISO);
     }
+
+    public CountryInfoDto MapToDto(CountryInfo entity)
+    {
+        return new CountryInfoDto() { ISO = entity.ISO, Name = entity.Name };
+    }
 }

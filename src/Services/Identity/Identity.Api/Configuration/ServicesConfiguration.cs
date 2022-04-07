@@ -26,6 +26,8 @@ public static class ServicesConfiguration
         connectionString = app.Configuration.GetConnectionString("IdentityDb");
         migrationsAssembly = "Identity.Infrastructure";
 
+        app.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
         app.ConfigureServicesLifetime()
             .ConfigureDbContext()
             .ConfigureIdentity()

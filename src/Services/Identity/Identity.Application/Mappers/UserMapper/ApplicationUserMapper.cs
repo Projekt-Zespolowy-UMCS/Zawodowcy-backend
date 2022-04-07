@@ -22,4 +22,5 @@ public class ApplicationUserMapper: IMapper<ApplicationUser, RegisterApplication
             dto.Street, dto.City, dto.City, countryInfo, dto.ZipCode, dto.FirstName,
             dto.LastName, dto.Email, dto.PhoneNumber, dto.UserName);
     }
+
 }
