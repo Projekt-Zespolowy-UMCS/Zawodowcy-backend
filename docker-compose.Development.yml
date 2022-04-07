@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  ZawodowcyIdentityDb:
+    container_name: 'zawodowcy_dev_identity_db'
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5433:5432'
+    networks:
+      - zawodowcy
+
+  ZawodowcyIdentity:
+    container_name: 'zawodowcy_dev_identity'
+    image: 'zawodowcy_dev_identity'
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Identity.Api/Dockerfile
+    ports:
+      - "5006:80"
+      - "3001:3000"
+    depends_on:
+      - "ZawodowcyIdentityDb"
+    networks:
+      - zawodowcy
+
+networks:
+  zawodowcy:
+    driver: bridge
