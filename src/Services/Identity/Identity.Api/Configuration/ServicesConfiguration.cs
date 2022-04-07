@@ -25,61 +25,11 @@ public static class ServicesConfiguration
         connectionString = app.Configuration.GetConnectionString("IdentityDb");
         migrationsAssembly = "Identity.Infrastructure";
 
-        app.ConfigureServicesLifetime();
-
-        app.ConfigureDbContext();
-        // app.Services.AddDbContext<AppIdentityDbContext>(options =>
-        //     options.UseNpgsql(connectionString,
-        //         npgsqlOptionsAction: sqlOptions =>
-        //         {
-        //             sqlOptions.MigrationsAssembly(migrationsAssembly);
-        //             //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-        //             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
-        //         }));
-
-        app.ConfigureIdentity();
-        // app.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        //     .AddEntityFrameworkStores<AppIdentityDbContext>()
-        //     .AddDefaultTokenProviders();
-
-        app.ConfigureIdentityServer();
-        // app.Services.AddIdentityServer(x =>
-        //     {
-        //         x.IssuerUri = "null";
-        //         x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
-        //         x.UserInteraction.LoginUrl = "/login";
-        //     })
-        //     .AddDeveloperSigningCredential()
-        //     .AddAspNetIdentity<ApplicationUser>()
-        //     .AddConfigurationStore(options =>
-        //     {
-        //         options.ConfigureDbContext = builder => builder.UseNpgsql(connectionString,
-        //             npgsqlOptionsAction: sqlOptions =>
-        //             {
-        //                 sqlOptions.MigrationsAssembly(migrationsAssembly);
-        //                 //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-        //                 sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30),
-        //                     errorCodesToAdd: null);
-        //             });
-        //     })
-        //     .AddOperationalStore(options =>
-        //     {
-        //         options.ConfigureDbContext = builder => builder.UseNpgsql(connectionString,
-        //             npgsqlOptionsAction: sqlOptions =>
-        //             {
-        //                 sqlOptions.MigrationsAssembly(migrationsAssembly);
-        //                 //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-        //                 sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30),
-        //                     errorCodesToAdd: null);
-        //             });
-        //     });
-
-        app.ConfigureSpa();
-        // app.Services.AddSpaStaticFiles(config =>
-        // {
-        //     config.RootPath = "client-ui";
-        // });
-        
+        app.ConfigureServicesLifetime()
+            .ConfigureDbContext()
+            .ConfigureIdentity()
+            .ConfigureIdentityServer()
+            .ConfigureSpa();
         return app;
     }
     

@@ -1,5 +1,6 @@
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using IdentityModel.Client;
 
 namespace Identity.Api.Configuration.Auth;
 
@@ -36,10 +37,11 @@ public class IdentityAuthConfig
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = { new Secret("secret".Sha256())},
-                    RedirectUris =           { $"http://localhost:3000/callback" },
+                    RedirectUris =           { $"{clientsUrl["SPA_REDIRECT_URI"]}/" },
                     RequireClientSecret = false,
                     RequirePkce = true,
-                    PostLogoutRedirectUris = { $"http://localhost:3000/" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["SPA_POST_LOGOUT_REDIRECT_URI"]}/" },
+                    AllowedCorsOrigins = { $"{clientsUrl["SPA_URI"]}/" },
                     AllowOfflineAccess = true,
                     AllowedScopes =
                     {

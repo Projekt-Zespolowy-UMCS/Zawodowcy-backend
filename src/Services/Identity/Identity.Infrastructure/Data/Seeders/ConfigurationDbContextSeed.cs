@@ -11,11 +11,8 @@ public class ConfigurationDbContextSeed
 {
     public async Task SeedAsync(ConfigurationDbContext context, IConfiguration configuration)
         {
-
-            //callbacks urls from config:
-            var clientUrls = new Dictionary<string, string>();
-
-            clientUrls.Add("Spa", configuration.GetValue<string>("SpaClient"));
+            var clientUrls = configuration.GetSection("Clients").GetChildren()
+                .ToDictionary(x => x.Key, x => x.Value);
 
             if (!context.Clients.Any())
             {
