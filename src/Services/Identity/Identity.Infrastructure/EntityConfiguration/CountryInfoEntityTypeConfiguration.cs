@@ -1,5 +1,5 @@
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

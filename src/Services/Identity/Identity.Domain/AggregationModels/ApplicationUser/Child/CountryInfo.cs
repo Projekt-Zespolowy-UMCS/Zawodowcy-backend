@@ -1,7 +1,7 @@
 using FluentValidation;
 using Identity.Domain.Base;
 
-namespace Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+namespace Identity.Domain.AggregationModels.ApplicationUser.Child;
 
 public class CountryInfo: BaseEntity
 {

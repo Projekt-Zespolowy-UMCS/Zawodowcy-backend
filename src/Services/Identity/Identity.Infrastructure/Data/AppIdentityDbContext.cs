@@ -1,6 +1,6 @@
 using System.ComponentModel.Design;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Identity.Infrastructure.EntityConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -8,7 +8,7 @@ using Identity.Application.DTO.RegisteringUser;
 using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Identity.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

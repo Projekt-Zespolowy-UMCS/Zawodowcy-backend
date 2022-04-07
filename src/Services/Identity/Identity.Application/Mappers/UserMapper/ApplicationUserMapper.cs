@@ -1,7 +1,7 @@
 using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 
 namespace Identity.Application.Mappers.UserMapper;
 

@@ -1,6 +1,6 @@
 using FluentValidation;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 
 namespace Identity.Application.DTO;
 

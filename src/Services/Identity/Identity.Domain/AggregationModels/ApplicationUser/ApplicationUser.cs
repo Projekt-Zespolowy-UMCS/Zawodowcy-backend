@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.AggregationModels.ApplicationUser;

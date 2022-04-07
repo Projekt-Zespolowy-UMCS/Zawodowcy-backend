@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+namespace Identity.Domain.AggregationModels.ApplicationUser.Child;
 
 public class CountryInfoValidator: AbstractValidator<CountryInfo>
 {

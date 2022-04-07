@@ -1,5 +1,5 @@
 using Identity.Application.DTO;
-using Identity.Domain.AggregationModels.ApplicationUser.ValueObjects;
+using Identity.Domain.AggregationModels.ApplicationUser.Child;
 
 namespace Identity.Application.Mappers;
 
