@@ -1,4 +1,4 @@
-namespace Identity.Api.Configuration;
+namespace Identity.Api.Configuration.Sections;
 
 public class ClientsConfig
 {

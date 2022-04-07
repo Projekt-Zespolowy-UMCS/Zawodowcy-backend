@@ -10,6 +10,7 @@ using Identity.Application.Mappers.UserMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Identity.Infrastructure.Data;
+using Identity.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,8 @@ public static class ServicesConfiguration
     {
         app.Services.AddScoped<IMapper<CountryInfo, CountryInfoDto>, CountryInfoMapper>();
         app.Services.AddScoped<IMapper<ApplicationUser, RegisterApplicationUserDto>, ApplicationUserMapper>();
+        
+        app.Services.AddScoped<ICountryRepository, CountryRepository>();
         
         return app;
     }
