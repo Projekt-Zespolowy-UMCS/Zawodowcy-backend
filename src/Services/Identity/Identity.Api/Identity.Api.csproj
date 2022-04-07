@@ -22,6 +22,9 @@
       <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
       <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
+      <None Update="dockerignore">
+        <DependentUpon>Dockerfile</DependentUpon>
+      </None>
     </ItemGroup>
 
 </Project>
