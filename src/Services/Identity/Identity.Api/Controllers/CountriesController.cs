@@ -29,7 +29,9 @@ public class CountriesController : ControllerBase
             .OrderBy(x => x.Name);
         return Ok(countriesDto);
     }
-
+    
+    [Route("get/{id}")]
+    [HttpGet]
     public async Task<IActionResult> Get(int id)
     {
         var country = await _countryRepository.GetAsync(id);
@@ -37,7 +39,9 @@ public class CountriesController : ControllerBase
             return Ok(country);
         return NotFound("There is no country with that id.");
     }
-
+    
+    [Route("get/{iso}")]
+    [HttpGet]
     public async Task<IActionResult> Get(string iso)
     {
         var country = await _countryRepository.GetAsync(iso);

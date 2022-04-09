@@ -6,6 +6,12 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseKestrel(options =>
+{
+    var port = System.Environment.GetEnvironmentVariable("PORT");
+    if (!string.IsNullOrWhiteSpace(port))
+        options.ListenAnyIP(Int32.Parse(port));
+});
 // Add services to the container.
 builder.ConfigureServices();
 

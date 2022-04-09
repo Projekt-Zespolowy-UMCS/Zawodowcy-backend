@@ -17,6 +17,7 @@ services:
     image: 'zawodowcy_dev_identity'
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
+      PORT: 7234
     build:
       context: .
       dockerfile: src/Services/Identity/Identity.Api/Dockerfile
