@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:7234/api/auth/";
+const BASE_URL = window.location.origin;
+const API_URL = `${BASE_URL}/api/auth/`;
 
 const defaultConfig = {
     headers: {
