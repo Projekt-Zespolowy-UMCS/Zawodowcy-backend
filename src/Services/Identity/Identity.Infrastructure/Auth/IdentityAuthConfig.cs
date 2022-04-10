@@ -37,11 +37,11 @@ public class IdentityAuthConfig
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
                     ClientSecrets = { new Secret("secret".Sha256())},
-                    RedirectUris =           { $"{clientsUrl["SPA_REDIRECT_URI"]}/" },
+                    RedirectUris =           { $"{clientsUrl["SPA_REDIRECT_URI"]}" },
                     RequireClientSecret = false,
                     RequirePkce = true,
-                    PostLogoutRedirectUris = { $"{clientsUrl["SPA_POST_LOGOUT_REDIRECT_URI"]}/" },
-                    AllowedCorsOrigins = { $"{clientsUrl["SPA_URI"]}/" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["SPA_POST_LOGOUT_REDIRECT_URI"]}" },
+                    AllowedCorsOrigins = { $"{clientsUrl["SPA_URI"]}" },
                     AllowOfflineAccess = true,
                     AllowedScopes =
                     {

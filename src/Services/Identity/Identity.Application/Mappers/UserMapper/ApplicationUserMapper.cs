@@ -1,3 +1,4 @@
+using AutoMapper;
 using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
 using Identity.Domain.AggregationModels.ApplicationUser;
@@ -7,17 +8,17 @@ namespace Identity.Application.Mappers.UserMapper;
 
 public class ApplicationUserMapper: IMapper<ApplicationUser, RegisterApplicationUserDto>
 {
-    public readonly IMapper<CountryInfo, CountryInfoDto> _countryMapper;
+    public readonly IMapper _mapper;
 
-    public ApplicationUserMapper(IMapper<CountryInfo, CountryInfoDto> countryMapper)
+    public ApplicationUserMapper(IMapper mapper)
     {
-        _countryMapper = countryMapper;
+        _mapper = mapper;
     }
     
     public ApplicationUser MapToEntity(RegisterApplicationUserDto dto)
     {
-        var countryInfo = _countryMapper.MapToEntity(dto.CountryInfo);
-        
+        // var countryInfo = _countryMapper.MapToEntity(dto.CountryInfo);
+        var countryInfo = _mapper.Map<CountryInfo>(dto.CountryInfo);
         return new ApplicationUser(
             dto.Street, dto.City, dto.City, countryInfo, dto.ZipCode, dto.FirstName,
             dto.LastName, dto.Email, dto.PhoneNumber, dto.UserName);

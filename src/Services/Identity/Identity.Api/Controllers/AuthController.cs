@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

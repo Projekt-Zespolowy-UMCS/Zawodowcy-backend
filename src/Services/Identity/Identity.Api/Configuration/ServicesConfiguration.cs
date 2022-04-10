@@ -39,7 +39,6 @@ public static class ServicesConfiguration
     
     private static WebApplicationBuilder ConfigureServicesLifetime(this WebApplicationBuilder app)
     {
-        app.Services.AddScoped<IMapper<CountryInfo, CountryInfoDto>, CountryInfoMapper>();
         app.Services.AddScoped<IMapper<ApplicationUser, RegisterApplicationUserDto>, ApplicationUserMapper>();
         
         app.Services.AddScoped<ICountryRepository, CountryRepository>();
