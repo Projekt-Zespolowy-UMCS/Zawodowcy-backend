@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - '5433:5432'
+      - '5432:5432'
     networks:
       - zawodowcy
 
@@ -18,11 +18,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       PORT: 7234
+      ConnectionStrings:IdentityDb: "Host=zawodowcy_dev_identity_db;Port=5432;Database=Postgres;Username=postgres;Password=postgres"
     build:
       context: .
       dockerfile: src/Services/Identity/Identity.Api/Dockerfile
     ports:
       - "5006:80"
+      - "7234:7234"
       - "3001:3000"
     depends_on:
       - "ZawodowcyIdentityDb"

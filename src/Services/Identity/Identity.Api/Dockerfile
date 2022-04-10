@@ -16,20 +16,10 @@ RUN dotnet restore "Zawodowcy.sln"
 
 COPY . .
 WORKDIR /src/Services/Identity/Identity.Api
-RUN mkdir /usr/local/nvm
-ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=16.13.0
-ENV NVM_INSTALL_PATH=${NVM_DIR}/versions/node/v${NODE_VERSION}
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
-    curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-RUN source $NVM_DIR/nvm.sh \
-   && nvm install $NODE_VERSION \
-   && nvm alias default $NODE_VERSION \
-   && nvm use default
-    
-ENV NODE_PATH=${NVM_INSTALL_PATH}/lib/node_modules
-ENV PATH=${PATH}:${NVM_INSTALL_PATH}/bin
-RUN cd client-ui && npm install react-scripts && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash && \
+    apt-get install -y nodejs && \
+    cd client-ui && npm install react-scripts && \
     npm install -g npm && npm install && cd .. &&  \
     dotnet build && dotnet publish --no-restore -c Release -o /app
 COPY /src/Services/Identity/Identity.Api/client-ui /app/client-ui
