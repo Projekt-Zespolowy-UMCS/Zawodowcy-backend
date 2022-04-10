@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  ZawodowcyIdentityDb:
+    container_name: 'zawodowcy_dev_identity_db'
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - zawodowcy
+
+networks:
+  zawodowcy:
+    driver: bridge
