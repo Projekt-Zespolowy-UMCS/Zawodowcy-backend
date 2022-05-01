@@ -23,8 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
-      <ProjectReference Include="..\src\Services\Identity\Identity.Application\Identity.Application.csproj" />
-      <ProjectReference Include="..\src\Services\Identity\Identity.Domain\Identity.Domain.csproj" />
     </ItemGroup>
 
 </Project>
