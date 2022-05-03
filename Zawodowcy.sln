@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ", "src\Infrastructure\EventBus\RabbitMQ\RabbitMQ.csproj", "{79FB015D-3BC7-46E7-97EE-E67CB550AA82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.UnitTests", "src\Infrastructure\EventBus\RabbitMQ.UnitTests\RabbitMQ.UnitTests.csproj", "{A9252F9E-6C04-4938-B869-A80446E49B7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{79FB015D-3BC7-46E7-97EE-E67CB550AA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79FB015D-3BC7-46E7-97EE-E67CB550AA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79FB015D-3BC7-46E7-97EE-E67CB550AA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9252F9E-6C04-4938-B869-A80446E49B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9252F9E-6C04-4938-B869-A80446E49B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9252F9E-6C04-4938-B869-A80446E49B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9252F9E-6C04-4938-B869-A80446E49B7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
