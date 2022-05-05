@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using Identity.Api.Configuration;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
@@ -14,6 +15,7 @@ builder.WebHost.UseKestrel(options =>
 });
 // Add services to the container.
 builder.ConfigureServices();
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Services.AddControllers();
 builder.Services.AddAuthentication();
@@ -21,6 +23,7 @@ builder.Services.AddAuthorization();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

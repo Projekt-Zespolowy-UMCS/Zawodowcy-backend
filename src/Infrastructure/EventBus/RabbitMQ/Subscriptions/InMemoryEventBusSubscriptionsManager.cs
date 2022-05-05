@@ -10,6 +10,7 @@ public class InMemoryEventBusSubscriptionsManager: IEventBusSubscriptionManager
     public event EventHandler<string> OnEventRemoved;
     
     public bool IsEmpty => _handlers.Any();
+    public void Clear() => _handlers.Clear();
     public bool HasSubscriptionsForEvent(string eventName) => _handlers.ContainsKey(eventName);
     public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(TEvent => TEvent.Name == eventName);
     public IEnumerable<SubscriptionInfo> GetHandlersForEvent(string eventName) => _handlers[eventName];

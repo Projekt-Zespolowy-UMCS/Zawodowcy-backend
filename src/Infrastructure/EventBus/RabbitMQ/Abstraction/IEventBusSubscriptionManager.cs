@@ -6,6 +6,7 @@ namespace RabbitMQ;
 public interface IEventBusSubscriptionManager
 {
     bool IsEmpty { get; }
+    void Clear();
     event EventHandler<string> OnEventRemoved;
     
     void AddSubscription<TEvent, THandler>()
