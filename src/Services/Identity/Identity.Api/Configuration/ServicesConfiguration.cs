@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ;
+using RabbitMQ.Client;
 using RabbitMQ.Subscriptions;
 
 namespace Identity.Api.Configuration;
@@ -36,6 +37,7 @@ public static class ServicesConfiguration
         app.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         app.ConfigureServicesLifetime()
+            .AddCustomIntegrations()
             .ConfigureDbContext()
             .ConfigureIdentity()
             .ConfigureIdentityServer()
@@ -43,7 +45,6 @@ public static class ServicesConfiguration
             .ConfigureSpa();
         return app;
     }
-    
     
     private static WebApplicationBuilder ConfigureServicesLifetime(this WebApplicationBuilder app)
     {
@@ -161,6 +162,40 @@ public static class ServicesConfiguration
         }
 
         app.Services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionsManager>();
+
+        return app;
+    }
+
+    public static WebApplicationBuilder AddCustomIntegrations(this WebApplicationBuilder app)
+    {
+        app.Services.AddSingleton<IRabbitMQConnection>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<RabbitMQConnection>>();
+
+            var factory = new ConnectionFactory()
+            {
+                HostName = app.Configuration["EventBusConnection"],
+                DispatchConsumersAsync = true
+            };
+
+            if (!string.IsNullOrEmpty(app.Configuration["EventBusUserName"]))
+            {
+                factory.UserName = app.Configuration["EventBusUserName"];
+            }
+
+            if (!string.IsNullOrEmpty(app.Configuration["EventBusPassword"]))
+            {
+                factory.Password = app.Configuration["EventBusPassword"];
+            }
+
+            var retryCount = 5;
+            if (!string.IsNullOrEmpty(app.Configuration["EventBusRetryCount"]))
+            {
+                retryCount = int.Parse(app.Configuration["EventBusRetryCount"]);
+            }
+
+            return new RabbitMQConnection(factory, logger, retryCount);
+        });
 
         return app;
     }

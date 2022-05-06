@@ -59,9 +59,10 @@ public class RabbitMQConnection: IRabbitMQConnection
 
         var policy = RetryPolicy.Handle<SocketException>()
             .Or<BrokerUnreachableException>()
-            .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(5), (ex, time) =>
+            .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (ex, time) =>
             {
-                _logger.LogWarning($"Could not connect to RabbitMQ event bus. Trying to reconnect. [${time.Seconds}, ${ex.Message}]");
+                _logger.LogWarning($"Could not connect to RabbitMQ event bus. Trying to reconnect. [{time.Seconds}, {ex.Message}]");
             });
         
         policy.Execute(() =>
@@ -75,7 +76,7 @@ public class RabbitMQConnection: IRabbitMQConnection
             _connection.CallbackException += OnCallbackException;
             _connection.ConnectionBlocked += OnConnectionBlocked;
             
-            _logger.LogInformation($"RabbitMQ Client acquired a persistent connection to '${_connection.Endpoint.HostName}' and has subscribed to failure events");
+            _logger.LogInformation($"RabbitMQ Client acquired a persistent connection to '{_connection.Endpoint.HostName}' and has subscribed to failure events");
             return true;
         }
         else
