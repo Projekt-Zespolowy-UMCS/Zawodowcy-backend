@@ -164,4 +164,11 @@ public static class ServicesConfiguration
 
         return app;
     }
+
+    public static WebApplication ConfigureEventBus(this WebApplication app)
+    {
+        var eventBus = app.Services.GetRequiredService<IEventBus>();
+        
+        return app;
+    }
 }

@@ -62,4 +62,6 @@ app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
     });
 });
 
+app.ConfigureEventBus();
+
 app.Run();
