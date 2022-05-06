@@ -15,7 +15,6 @@ builder.WebHost.UseKestrel(options =>
 });
 // Add services to the container.
 builder.ConfigureServices();
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Services.AddControllers();
 builder.Services.AddAuthentication();
