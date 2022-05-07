@@ -9,6 +9,7 @@ using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
 using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
+using Identity.Application.Mappers.UserMapper.CountryInfoMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
 using Identity.Domain.AggregationModels.ApplicationUser.Child;
 using Identity.Infrastructure.Data;
@@ -49,6 +50,7 @@ public static class ServicesConfiguration
     private static WebApplicationBuilder ConfigureServicesLifetime(this WebApplicationBuilder app)
     {
         app.Services.AddScoped<IMapper<ApplicationUser, RegisterApplicationUserDto>, ApplicationUserMapper>();
+        app.Services.AddScoped<IMapper<CountryInfo, CountryInfoDto>, CountryInfoMapper>();
         
         app.Services.AddScoped<ICountryRepository, CountryRepository>();
         
