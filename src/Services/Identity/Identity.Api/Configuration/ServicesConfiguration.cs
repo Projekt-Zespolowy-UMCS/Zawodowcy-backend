@@ -7,6 +7,8 @@ using FluentValidation.AspNetCore;
 using Identity.Api.Configuration.Auth;
 using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
+using Identity.Application.Event;
+using Identity.Application.EventHandlers;
 using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
@@ -37,12 +39,14 @@ public static class ServicesConfiguration
         app.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         app.ConfigureServicesLifetime()
+            .RegisterEventHandlers()
             .AddCustomIntegrations()
             .ConfigureDbContext()
             .ConfigureIdentity()
             .ConfigureIdentityServer()
             .AddEventBus()
             .ConfigureSpa();
+        
         return app;
     }
     
@@ -200,9 +204,18 @@ public static class ServicesConfiguration
         return app;
     }
 
+    public static WebApplicationBuilder RegisterEventHandlers(this WebApplicationBuilder app)
+    {
+        app.Services.AddTransient<ExampleEventHandler>();
+        
+        return app;
+    }
+
     public static WebApplication ConfigureEventBus(this WebApplication app)
     {
         var eventBus = app.Services.GetRequiredService<IEventBus>();
+        
+        eventBus.Subscribe<ExampleEvent, ExampleEventHandler>();
         
         return app;
     }
