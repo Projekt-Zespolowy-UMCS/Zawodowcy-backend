@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using Identity.Api.Configuration;
 using Identity.Api.Extensions;
 using Identity.Api.Utils;
@@ -21,6 +22,7 @@ builder.Services.AddAuthorization();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -59,5 +61,7 @@ app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
         }
     });
 });
+
+app.ConfigureEventBus();
 
 app.Run();
