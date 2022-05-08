@@ -30,7 +30,7 @@ public class CountriesController : ControllerBase
         return Ok(countriesDto);
     }
     
-    [Route("get/{id}")]
+    [Route("id/{id}")]
     [HttpGet]
     public async Task<IActionResult> Get(int id)
     {
@@ -40,7 +40,7 @@ public class CountriesController : ControllerBase
         return NotFound("There is no country with that id.");
     }
     
-    [Route("get/{iso}")]
+    [Route("iso/{iso}")]
     [HttpGet]
     public async Task<IActionResult> Get(string iso)
     {
