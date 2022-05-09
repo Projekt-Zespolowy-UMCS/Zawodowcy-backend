@@ -1,9 +1,9 @@
 using FluentValidation;
 using Identity.Domain.Base;
 
-namespace Identity.Domain.AggregationModels.ApplicationUser.Child;
+namespace Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
-public class CountryInfo: BaseEntity
+public class CountryInfoAggregate: BaseEntity
 {
     public string ISO { get; private set; }
     public string Name { get; private set; }
@@ -11,9 +11,9 @@ public class CountryInfo: BaseEntity
     /// <summary>
     /// For Entity Framework purposes
     /// </summary>
-    private CountryInfo() {}
+    private CountryInfoAggregate() {}
     
-    public CountryInfo(string iso, string name)
+    public CountryInfoAggregate(string iso, string name)
     {
         ISO = iso ?? throw new ArgumentException(nameof(iso));
         Name = name ?? throw new ArgumentException(nameof(name));

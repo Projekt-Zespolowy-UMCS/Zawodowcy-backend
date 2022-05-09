@@ -11,7 +11,7 @@ using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
 using Identity.Application.Mappers.UserMapper.CountryInfoMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;

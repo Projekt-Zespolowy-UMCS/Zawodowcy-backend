@@ -1,6 +1,6 @@
 using AutoMapper;
 using Identity.Application.DTO;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
 namespace Identity.Api.Configuration;
 

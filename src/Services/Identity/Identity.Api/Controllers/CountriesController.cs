@@ -1,7 +1,7 @@
 using AutoMapper;
 using Identity.Application.DTO;
 using Identity.Application.Mappers;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace idsserver;

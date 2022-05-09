@@ -3,8 +3,9 @@ using System.ComponentModel.Design;
 using AutoMapper;
 using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
+using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
@@ -17,14 +18,14 @@ public class ApplicationUserMapperTests
     public void User_is_correctly_mapped_to_aggregate()
     {
         //arrange
-        var mapperStub = new Mock<IMapper>();
+        var mapperStub = new Mock<IMapper<CountryInfoAggregate, CountryInfoDto>>();
         var countryInfoDto = new CountryInfoDto()
         {
             ISO = "USA",
             Name = "United States of America"
         };
-        mapperStub.Setup(x => x.Map<CountryInfo>(countryInfoDto))
-            .Returns(new CountryInfo("USA", "United States of America"));
+        mapperStub.Setup(x => x.MapToEntity(countryInfoDto))
+            .Returns(new CountryInfoAggregate("USA", "United States of America"));
         var userMapper = new ApplicationUserMapper(mapperStub.Object);
         
         //act

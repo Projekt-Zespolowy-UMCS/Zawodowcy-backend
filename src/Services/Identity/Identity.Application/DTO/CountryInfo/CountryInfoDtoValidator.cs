@@ -1,6 +1,6 @@
 using FluentValidation;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
 namespace Identity.Application.DTO;
 

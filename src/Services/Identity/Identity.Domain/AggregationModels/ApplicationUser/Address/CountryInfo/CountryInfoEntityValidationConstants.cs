@@ -1,4 +1,4 @@
-namespace Identity.Domain.AggregationModels.ApplicationUser.Child;
+namespace Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
 public static class CountryInfoEntityValidationConstants
 {
