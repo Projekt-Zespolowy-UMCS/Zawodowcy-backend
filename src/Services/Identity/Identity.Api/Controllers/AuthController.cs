@@ -28,24 +28,24 @@ namespace idsserver
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
-        private readonly SignInManager<ApplicationUser> _manager;
-        private readonly UserManager<ApplicationUser> _usermanager;
+        private readonly SignInManager<ApplicationUserAggregateRoot> _manager;
+        private readonly UserManager<ApplicationUserAggregateRoot> _usermanager;
         private readonly IPersistedGrantService _grantService;
         private readonly IPersistedGrantStore _grantStore;
         private readonly ILogger<AuthController> _logger;
-        private readonly IMapper<ApplicationUser, RegisterApplicationUserDto> _userMapper;
+        private readonly IMapper<ApplicationUserAggregateRoot, RegisterApplicationUserDto> _userMapper;
 
         public AuthController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            SignInManager<ApplicationUser> manager,
-            UserManager<ApplicationUser> usermanager,
+            SignInManager<ApplicationUserAggregateRoot> manager,
+            UserManager<ApplicationUserAggregateRoot> usermanager,
             IPersistedGrantService grantService,
             IPersistedGrantStore grantStore,
             ILogger<AuthController> logger,
-            IMapper<ApplicationUser, RegisterApplicationUserDto> userMapper)
+            IMapper<ApplicationUserAggregateRoot, RegisterApplicationUserDto> userMapper)
         {
             _interaction = interaction;
             _clientStore = clientStore;

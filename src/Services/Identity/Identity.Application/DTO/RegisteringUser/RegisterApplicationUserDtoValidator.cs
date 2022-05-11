@@ -1,4 +1,5 @@
 using FluentValidation;
+using Identity.Application.DTO.Address;
 using Identity.Domain.AggregationModels.ApplicationUser;
 
 namespace Identity.Application.DTO.RegisteringUser;
@@ -20,6 +21,9 @@ public class RegisterApplicationUserDtoValidator: AbstractValidator<RegisterAppl
         //     .WithMessage("Country cannot be null.")
         //     .SetValidator(new CountryInfoDtoValidator());
 
+        RuleFor(u => u.Address)
+            .SetValidator(new AddAddressValidatorDto());
+        
         RuleFor(u => u.FirstName)
             .NotEmpty()
             .WithMessage("First name cannot be empty.")

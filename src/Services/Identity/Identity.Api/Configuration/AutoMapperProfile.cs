@@ -8,6 +8,6 @@ public class AutoMapperProfile: Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<CountryInfo, CountryInfoDto>();
+        CreateMap<CountryInfoAggregate, CountryInfoDto>();
     }
 }

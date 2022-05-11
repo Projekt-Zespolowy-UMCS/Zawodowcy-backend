@@ -3,7 +3,7 @@
 public interface IAddressRepository
 {
     public Task<AddressAggregate?> GetUserAddressAsync(int id);
-    public Task<int> AddUserAddressAsync(AddressAggregate address);
-    public Task RemoveUserAddressAsync(int userId);
-    public Task RemoveAddressByIdAsync(int addressId);
+    public Task<AddressAggregate> AddUserAddressAsync(AddressAggregate address);
+    public Task<bool> RemoveUserAddressAsync(string userId);
+    public Task<bool> RemoveAddressByIdAsync(int addressId);
 }

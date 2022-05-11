@@ -1,4 +1,5 @@
-﻿using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
+﻿using FluentValidation;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Identity.Domain.Base;
 
 namespace Identity.Domain.AggregationModels.ApplicationUser.Address;
@@ -14,10 +15,12 @@ public class AddressAggregate: BaseEntity
 
     public AddressAggregate(string street, string city, string state, CountryInfoAggregate country, string zipCode)
     {
-        Street = street;
-        City = city;
-        State = state;
-        Country = country;
-        ZipCode = zipCode;
+        Street = street ?? throw new ArgumentException(nameof(street));
+        City = city ?? throw new ArgumentException(nameof(city));
+        State = state  ?? throw new ArgumentException(nameof(state));
+        Country = country ?? throw new ArgumentException(nameof(country));
+        ZipCode = zipCode  ?? throw new ArgumentException(nameof(zipCode));
+        
+        new AddressValidator().ValidateAndThrow<AddressAggregate>(this);
     }
 }
