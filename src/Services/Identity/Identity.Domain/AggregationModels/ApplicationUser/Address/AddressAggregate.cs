@@ -12,6 +12,8 @@ public class AddressAggregate: BaseEntity
     public int CountryId { get; protected set; }
     public CountryInfoAggregate Country { get; protected set; }
     public string ZipCode { get; protected set; }
+    
+    protected AddressAggregate() {}
 
     public AddressAggregate(string street, string city, string state, CountryInfoAggregate country, string zipCode)
     {
