@@ -24,6 +24,11 @@ public class ApplicationUserEntityTypeConfiguration : IEntityTypeConfiguration<A
         builder
             .Property(user => user.CreationDate)
             .IsRequired(true);
+        
+        builder
+            .HasOne(u => u.Address)
+            .WithOne()
+            .IsRequired(false);
 
         // var navigation = builder.Metadata.FindNavigation(nameof(ApplicationUser.Country));
         // navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

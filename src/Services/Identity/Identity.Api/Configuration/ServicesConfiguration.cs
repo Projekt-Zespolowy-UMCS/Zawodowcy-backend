@@ -56,6 +56,7 @@ public static class ServicesConfiguration
         app.Services.AddScoped<ICountryInfoMapper, CountryInfoMapper>();
         
         app.Services.AddScoped<ICountryRepository, CountryRepository>();
+        app.Services.AddScoped<IAddressRepository, AddressRepository>();
         
         return app;
     }

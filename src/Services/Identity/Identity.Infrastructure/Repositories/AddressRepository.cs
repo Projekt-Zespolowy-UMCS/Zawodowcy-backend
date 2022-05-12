@@ -25,6 +25,13 @@ public class AddressRepository: IAddressRepository
         return addedEntity?.Entity;
     }
 
+    public async Task<AddressAggregate> UpdateUserAddress(AddressAggregate address)
+    {
+        var updatedEntity = _context.Addresses.Update(address);
+        await _context.SaveChangesAsync();
+        return updatedEntity?.Entity;
+    }
+
     public async Task<bool> RemoveUserAddressAsync(string userId)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);

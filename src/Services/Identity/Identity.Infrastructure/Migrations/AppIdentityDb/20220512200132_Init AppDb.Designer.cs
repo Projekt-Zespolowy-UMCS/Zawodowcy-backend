@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20220512183109_Init AppDb")]
+    [Migration("20220512200132_Init AppDb")]
     partial class InitAppDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -316,10 +317,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", b =>
                 {
                     b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne()
+                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", "AddressId");
 
                     b.Navigation("Address");
                 });

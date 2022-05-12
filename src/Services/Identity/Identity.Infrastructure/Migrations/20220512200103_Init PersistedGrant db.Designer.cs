@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Identity.Infrastructure.Migrations.PersistedGrantDb
+namespace Identity.Infrastructure.Migrations
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20220512182806_Init PersistedGrant db")]
+    [Migration("20220512200103_Init PersistedGrant db")]
     partial class InitPersistedGrantdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

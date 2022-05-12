@@ -25,4 +25,17 @@ public class AddressAggregate: BaseEntity
         
         new AddressValidator().ValidateAndThrow<AddressAggregate>(this);
     }
+    
+    public AddressAggregate(int id, string street, string city, string state, CountryInfoAggregate country, string 
+    zipCode)
+    {
+        Id = id == 0 ? throw new ArgumentException(nameof(id)) : id;
+        Street = street ?? throw new ArgumentException(nameof(street));
+        City = city ?? throw new ArgumentException(nameof(city));
+        State = state  ?? throw new ArgumentException(nameof(state));
+        Country = country ?? throw new ArgumentException(nameof(country));
+        ZipCode = zipCode  ?? throw new ArgumentException(nameof(zipCode));
+        
+        new AddressValidator().ValidateAndThrow<AddressAggregate>(this);
+    }
 }

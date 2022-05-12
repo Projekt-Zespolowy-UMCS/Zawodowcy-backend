@@ -156,7 +156,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -314,10 +315,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", b =>
                 {
                     b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne()
+                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", "AddressId");
 
                     b.Navigation("Address");
                 });
