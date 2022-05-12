@@ -9,6 +9,16 @@ public class ApplicationUserValidator: AbstractValidator<ApplicationUserAggregat
     public ApplicationUserValidator()
     {
 
+        RuleFor(u => u.FirstName)
+            .MinimumLength(2)
+            .MaximumLength(ApplicationUserEntityValidationConstants.FirstNameMaxLength)
+            .WithMessage($"Length must be between 2 and {ApplicationUserEntityValidationConstants.FirstNameMaxLength} chars length.");
+        
+        RuleFor(u => u.LastName)
+            .MinimumLength(2)
+            .MaximumLength(ApplicationUserEntityValidationConstants.LastNameMaxLength)
+            .WithMessage($"Length must be between 2 and {ApplicationUserEntityValidationConstants.LastNameMaxLength} chars length.");
+
         RuleFor(u => u.CreationDate)
             .LessThanOrEqualTo(DateTime.Now)
             .WithMessage("Creation date is invalid. It cannot be set in the future.");
