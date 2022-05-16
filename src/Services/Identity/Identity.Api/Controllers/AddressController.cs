@@ -20,15 +20,15 @@ public class AddressController: ControllerBase
         _addressMapper = addressMapper;
     }
     
-    [Route("add")]
+    [Route("add/{userId}")]
     [HttpPost]
-    public async Task<IActionResult> AddUserAddress(AddAddressDto addressDto)
+    public async Task<IActionResult> AddUserAddress(AddAddressDto addressDto, string userId)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var address = _addressMapper.MapToEntity(addressDto);
-        var addressAdded = await _addressRepository.AddUserAddressAsync(address);
+        var addressAdded = await _addressRepository.AddUserAddressAsync(address, userId);
 
         return Ok(addressAdded);
     }

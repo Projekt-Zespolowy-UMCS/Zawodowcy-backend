@@ -39,4 +39,10 @@ public class ApplicationUserAggregateRoot: IdentityUser
 
         new ApplicationUserValidator().ValidateAndThrow<ApplicationUserAggregateRoot>(this);
     }
+
+    public void SetUserAddress(AddressAggregate address)
+    {
+        Address = address;
+        AddressId = address.Id;
+    }
 }

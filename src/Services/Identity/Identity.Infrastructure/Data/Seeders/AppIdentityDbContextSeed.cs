@@ -6,6 +6,7 @@ using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,8 +22,8 @@ public class AppIdentityDbContextSeed
 
         try
         {
-            SeedUsers(serviceProvider);
             SeedCountries(serviceProvider);
+            SeedUsers(serviceProvider);
         }
         catch (Exception ex)
         {
@@ -38,8 +39,11 @@ public class AppIdentityDbContextSeed
     {
         using var scopes = serviceProvider.CreateScope();
         var userManager = scopes.ServiceProvider.GetRequiredService<UserManager<ApplicationUserAggregateRoot>>();
+        var context = scopes.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
         if (!userManager.Users.Any())
         {
+            var defaultUser = GetDefaultUser();
+            await context.Addresses.AddAsync(defaultUser.Address);
             await userManager.CreateAsync(GetDefaultUser(), "Pass@word1");
         }
     }

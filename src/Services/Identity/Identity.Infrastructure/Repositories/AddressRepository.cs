@@ -18,9 +18,14 @@ public class AddressRepository: IAddressRepository
         return await _context.Addresses.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<AddressAggregate> AddUserAddressAsync(AddressAggregate address)
+    public async Task<AddressAggregate> AddUserAddressAsync(AddressAggregate address, string userId)
     {
         var addedEntity = await _context.Addresses.AddAsync(address);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user is null)
+            throw new ArgumentException($"There is no user with ID {userId}.");
+
+        user.SetUserAddress(address);
         await _context.SaveChangesAsync();
         return addedEntity?.Entity;
     }
