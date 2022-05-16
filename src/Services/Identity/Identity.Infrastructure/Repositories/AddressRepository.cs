@@ -30,6 +30,14 @@ public class AddressRepository: IAddressRepository
         return addedEntity?.Entity;
     }
 
+    public async Task<AddressAggregate> CreateAddressAsync(AddressAggregate address)
+    {
+        var addedEntity = await _context.Addresses.AddAsync(address);
+        await _context.SaveChangesAsync();
+
+        return addedEntity.Entity;
+    }
+
     public async Task<AddressAggregate> UpdateUserAddress(AddressAggregate address)
     {
         var updatedEntity = _context.Addresses.Update(address);

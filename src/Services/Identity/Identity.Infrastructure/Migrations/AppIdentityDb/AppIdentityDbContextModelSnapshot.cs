@@ -91,7 +91,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")

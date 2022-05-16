@@ -46,6 +46,8 @@ public class AppIdentityDbContextSeed
             await context.Addresses.AddAsync(defaultUser.Address);
             await userManager.CreateAsync(GetDefaultUser(), "Pass@word1");
         }
+        
+        await context.SaveChangesAsync();
     }
     
     private async Task SeedCountries(IServiceProvider serviceProvider)

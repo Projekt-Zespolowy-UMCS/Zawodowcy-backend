@@ -24,7 +24,8 @@ public class ApplicationUserMapper: IApplicationUserMapper
         if (dto.Address != null)
             addressAggregate = _addressMapper.MapToEntity(dto.Address);
         
-        return new ApplicationUserAggregateRoot(dto.FirstName, dto.LastName, dto.Email, dto.PhoneNumber, addressAggregate);
+        var user = new ApplicationUserAggregateRoot(dto.FirstName, dto.LastName, dto.Email, dto.PhoneNumber, addressAggregate);
+        return user;
     }
 
 }

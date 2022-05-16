@@ -14,7 +14,9 @@ using Identity.Api.DTO;
 using Identity.Application.DTO.RegisteringUser;
 using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
+using Identity.Application.Mappers.UserMapper.AddressMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
+using Identity.Domain.AggregationModels.ApplicationUser.Address;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -30,10 +32,11 @@ namespace idsserver
         private readonly IEventService _events;
         private readonly SignInManager<ApplicationUserAggregateRoot> _manager;
         private readonly UserManager<ApplicationUserAggregateRoot> _usermanager;
+        private readonly IAddressRepository _addressRepository;
         private readonly IPersistedGrantService _grantService;
         private readonly IPersistedGrantStore _grantStore;
         private readonly ILogger<AuthController> _logger;
-        private readonly IMapper<ApplicationUserAggregateRoot, RegisterApplicationUserDto> _userMapper;
+        private readonly IApplicationUserMapper _userMapper;
 
         public AuthController(
             IIdentityServerInteractionService interaction,
@@ -42,10 +45,11 @@ namespace idsserver
             IEventService events,
             SignInManager<ApplicationUserAggregateRoot> manager,
             UserManager<ApplicationUserAggregateRoot> usermanager,
+            IAddressRepository addressRepository,
             IPersistedGrantService grantService,
             IPersistedGrantStore grantStore,
             ILogger<AuthController> logger,
-            IMapper<ApplicationUserAggregateRoot, RegisterApplicationUserDto> userMapper)
+            IApplicationUserMapper userMapper)
         {
             _interaction = interaction;
             _clientStore = clientStore;
@@ -53,6 +57,7 @@ namespace idsserver
             _events = events;
             _manager = manager;
             _usermanager = usermanager;
+            _addressRepository = addressRepository;
             _grantService = grantService;
             _grantStore = grantStore;
             _logger = logger;
@@ -151,14 +156,27 @@ namespace idsserver
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var newUser = _userMapper.MapToEntity(dto);
-            var result = await _usermanager.CreateAsync(newUser, dto.Password);
-            if (result.Succeeded)
+            try
             {
+                var newUser = _userMapper.MapToEntity(dto);
+
+                if (newUser.Address is not null)
+                {
+                    var addedAddress = await _addressRepository.CreateAddressAsync(newUser.Address);
+                    newUser.SetUserAddress(addedAddress);
+                }
+
+                var result = await _usermanager.CreateAsync(newUser, dto.Password);
+                if (!result.Succeeded)
+                    return BadRequest(result.Errors);
+
                 return Ok();
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
-            return StatusCode(500);
         }
 
         /// <summary>

@@ -9,5 +9,5 @@ public class RegisterApplicationUserDto
     public string Email { get; set; }
     public string Password { get; set; }
     public string PhoneNumber { get; set; }
-    public AddAddressDto Address { get; set; }
+    public AddAddressDto? Address { get; set; }
 }

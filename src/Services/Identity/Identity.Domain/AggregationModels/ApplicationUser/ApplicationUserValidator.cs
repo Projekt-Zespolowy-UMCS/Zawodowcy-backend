@@ -22,6 +22,9 @@ public class ApplicationUserValidator: AbstractValidator<ApplicationUserAggregat
         RuleFor(u => u.CreationDate)
             .LessThanOrEqualTo(DateTime.Now)
             .WithMessage("Creation date is invalid. It cannot be set in the future.");
+
+        RuleFor(u => u.Address)
+            .SetValidator(new AddressValidator());
         
         When(u => u.LastUpdatedDate != null, () =>
         {

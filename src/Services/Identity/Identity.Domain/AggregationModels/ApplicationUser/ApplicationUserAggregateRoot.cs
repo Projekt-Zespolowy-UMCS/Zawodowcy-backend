@@ -8,8 +8,8 @@ namespace Identity.Domain.AggregationModels.ApplicationUser;
 
 public class ApplicationUserAggregateRoot: IdentityUser
 {
-    public int AddressId { get; protected set; }
-    public AddressAggregate? Address { get; protected set; }
+    public int? AddressId { get; protected set; }
+    public AddressAggregate Address { get; protected set; }
     public string FirstName { get; protected set; }
     public string LastName { get; protected set; }
 
@@ -27,7 +27,7 @@ public class ApplicationUserAggregateRoot: IdentityUser
     /// </summary>
     protected ApplicationUserAggregateRoot() {}
 
-    public ApplicationUserAggregateRoot(string firstName, string lastName, string email, string phoneNumber, AddressAggregate? address)
+    public ApplicationUserAggregateRoot(string firstName, string lastName, string email, string phoneNumber, AddressAggregate address)
     {
         FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
         LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
@@ -35,7 +35,7 @@ public class ApplicationUserAggregateRoot: IdentityUser
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
         UserName = email ?? throw new ArgumentNullException(nameof(email));
-        address = Address;
+        Address = address;
 
         new ApplicationUserValidator().ValidateAndThrow<ApplicationUserAggregateRoot>(this);
     }
