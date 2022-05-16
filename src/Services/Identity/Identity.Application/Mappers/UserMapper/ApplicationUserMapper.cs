@@ -1,27 +1,31 @@
 using AutoMapper;
 using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
+using Identity.Application.Mappers.UserMapper.AddressMapper;
+using Identity.Application.Mappers.UserMapper.CountryInfoMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
 namespace Identity.Application.Mappers.UserMapper;
 
-public class ApplicationUserMapper: IMapper<ApplicationUser, RegisterApplicationUserDto>
+public class ApplicationUserMapper: IApplicationUserMapper
 {
-    public readonly IMapper<CountryInfo, CountryInfoDto> _mapper;
+    public readonly IAddressMapper _addressMapper;
 
-    public ApplicationUserMapper(IMapper<CountryInfo, CountryInfoDto> mapper)
+    public ApplicationUserMapper(IAddressMapper addressMapper)
     {
-        _mapper = mapper;
+        _addressMapper = addressMapper;
     }
     
-    public ApplicationUser MapToEntity(RegisterApplicationUserDto dto)
+    public ApplicationUserAggregateRoot MapToEntity(RegisterApplicationUserDto dto)
     {
-        // var countryInfo = _countryMapper.MapToEntity(dto.CountryInfo);
-        var countryInfo = _mapper.MapToEntity(dto.CountryInfo);
-        return new ApplicationUser(
-            dto.Street, dto.City, dto.City, countryInfo, dto.ZipCode, dto.FirstName,
-            dto.LastName, dto.Email, dto.PhoneNumber, dto.UserName);
+        AddressAggregate addressAggregate = null;
+        if (dto.Address != null)
+            addressAggregate = _addressMapper.MapToEntity(dto.Address);
+        
+        var user = new ApplicationUserAggregateRoot(dto.FirstName, dto.LastName, dto.Email, dto.PhoneNumber, addressAggregate);
+        return user;
     }
 
 }

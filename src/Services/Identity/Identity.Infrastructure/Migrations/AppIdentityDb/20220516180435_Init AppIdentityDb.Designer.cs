@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20220330183520_Init AppDb")]
-    partial class InitAppDb
+    [Migration("20220516180435_Init AppIdentityDb")]
+    partial class InitAppIdentityDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,68 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId")
+                        .IsUnique();
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo.CountryInfoAggregate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ISO")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CountryInfos");
+                });
+
+            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -32,17 +93,12 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
@@ -93,16 +149,6 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -110,14 +156,9 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId")
+                    b.HasIndex("AddressId")
                         .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
@@ -128,28 +169,6 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ValueObjects.CountryInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ISO")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CountryInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -284,15 +303,24 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", b =>
                 {
-                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ValueObjects.CountryInfo", "Country")
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo.CountryInfoAggregate", "Country")
                         .WithOne()
-                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", "CountryId")
+                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", "CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", b =>
+                {
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", "Address")
+                        .WithOne()
+                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", "AddressId");
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -306,7 +334,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", null)
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -315,7 +343,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", null)
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,7 +358,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", null)
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -339,7 +367,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUser", null)
+                    b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.ApplicationUserAggregateRoot", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

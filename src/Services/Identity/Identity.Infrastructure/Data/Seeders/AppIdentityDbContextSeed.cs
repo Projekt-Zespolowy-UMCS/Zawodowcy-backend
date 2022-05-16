@@ -1,10 +1,12 @@
 using System.Globalization;
 using System.Security.Cryptography.Xml;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,15 +15,15 @@ namespace Identity.Infrastructure.Data;
 
 public class AppIdentityDbContextSeed
 {
-    public readonly PasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
+    public readonly PasswordHasher<ApplicationUserAggregateRoot> _passwordHasher = new();
     public async Task SeedAsync(IServiceProvider serviceProvider, int? retry = 0)
     {
         int retryCounter = retry.Value;
 
         try
         {
-            SeedUsers(serviceProvider);
             SeedCountries(serviceProvider);
+            SeedUsers(serviceProvider);
         }
         catch (Exception ex)
         {
@@ -36,11 +38,16 @@ public class AppIdentityDbContextSeed
     private async Task SeedUsers(IServiceProvider serviceProvider)
     {
         using var scopes = serviceProvider.CreateScope();
-        var userManager = scopes.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = scopes.ServiceProvider.GetRequiredService<UserManager<ApplicationUserAggregateRoot>>();
+        var context = scopes.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
         if (!userManager.Users.Any())
         {
+            var defaultUser = GetDefaultUser();
+            await context.Addresses.AddAsync(defaultUser.Address);
             await userManager.CreateAsync(GetDefaultUser(), "Pass@word1");
         }
+        
+        await context.SaveChangesAsync();
     }
     
     private async Task SeedCountries(IServiceProvider serviceProvider)
@@ -54,44 +61,49 @@ public class AppIdentityDbContextSeed
         }
     }
 
-    private ApplicationUser GetDefaultUser()
+    private ApplicationUserAggregateRoot GetDefaultUser()
     {
-        var regionInfo = new RegionInfo("PL");
-
         var user =
-            new ApplicationUser(
-                "Wiejska",
-                "Warszawa",
-                "Mazowieckie",
-                new CountryInfo(regionInfo.ThreeLetterISORegionName, regionInfo.EnglishName),
-                "08500",
+            new ApplicationUserAggregateRoot(
                 "Andrzej",
                 "Daniluk",
                 "test@test.com",
                 "123456789",
-                "test@test.com");
+                GetDefaultAddress());
 
         user.PasswordHash = _passwordHasher.HashPassword(user, "Pass@word1");
 
         return user;
     }
 
-    private IEnumerable<CountryInfo> GetCountriesList()
+    private AddressAggregate GetDefaultAddress()
+    {
+        var regionInfo = new RegionInfo("PL");
+        
+        return new AddressAggregate(
+            "Wiejska",
+            "Warszawa",
+            "Mazowieckie",
+            new CountryInfoAggregate(regionInfo.ThreeLetterISORegionName, regionInfo.EnglishName),
+            "08500");
+    }
+
+    private IEnumerable<CountryInfoAggregate> GetCountriesList()
     {
         var cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
-        IEnumerable<CountryInfo> countries = new List<CountryInfo>();
+        IEnumerable<CountryInfoAggregate> countries = new List<CountryInfoAggregate>();
         foreach (var culture in cultures)
         {
             var region = new RegionInfo(culture.Name);
             if (IsCountryValid(countries, region.ThreeLetterISORegionName, region.EnglishName))
-                countries = countries.Append(new CountryInfo(region.ThreeLetterISORegionName, region.EnglishName));
+                countries = countries.Append(new CountryInfoAggregate(region.ThreeLetterISORegionName, region.EnglishName));
         }
 
         countries = countries.OrderBy(x => x.Name);
         return countries;
     }
 
-    private bool IsCountryValid(IEnumerable<CountryInfo> countries, string iso, string name)
+    private bool IsCountryValid(IEnumerable<CountryInfoAggregate> countries, string iso, string name)
     {
         return iso != String.Empty && 
                name != String.Empty && 

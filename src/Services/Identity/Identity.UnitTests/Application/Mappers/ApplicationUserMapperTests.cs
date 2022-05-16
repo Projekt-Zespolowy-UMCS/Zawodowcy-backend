@@ -2,9 +2,14 @@
 using System.ComponentModel.Design;
 using AutoMapper;
 using Identity.Application.DTO;
+using Identity.Application.DTO.Address;
 using Identity.Application.DTO.RegisteringUser;
+using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Application.Mappers.UserMapper.AddressMapper;
+using Identity.Application.Mappers.UserMapper.CountryInfoMapper;
+using Identity.Domain.AggregationModels.ApplicationUser.Address;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
@@ -17,38 +22,54 @@ public class ApplicationUserMapperTests
     public void User_is_correctly_mapped_to_aggregate()
     {
         //arrange
-        var mapperStub = new Mock<IMapper>();
-        var countryInfoDto = new CountryInfoDto()
-        {
-            ISO = "USA",
-            Name = "United States of America"
-        };
-        mapperStub.Setup(x => x.Map<CountryInfo>(countryInfoDto))
-            .Returns(new CountryInfo("USA", "United States of America"));
-        var userMapper = new ApplicationUserMapper(mapperStub.Object);
+        var addressMapperStub = new Mock<IAddressMapper>();
+        var addressDto = GetExampleAddAddressDto();
+        var countryInfoAggregate = new CountryInfoAggregate("USA", "United States of America");
+        var addressAggregate = new AddressAggregate("Random", "Warsaw", "Lubelskie", countryInfoAggregate, "08500");
+
+        addressMapperStub.Setup(x => x.MapToEntity(addressDto))
+            .Returns(addressAggregate);
+        var userMapper = new ApplicationUserMapper(addressMapperStub.Object);
         
         //act
-        var appUser = userMapper.MapToEntity(GetFakeRegisterUser(countryInfoDto));
+        var appUser = userMapper.MapToEntity(GetFakeRegisterUser());
 
         //assert
         Assert.NotNull(appUser);
+        addressMapperStub.Verify(x => x.MapToEntity(It.IsAny<AddAddressDto>()));
     }
 
-    public RegisterApplicationUserDto GetFakeRegisterUser(CountryInfoDto countryInfoDto)
+    public RegisterApplicationUserDto GetFakeRegisterUser()
     {
         return new RegisterApplicationUserDto()
         {
-            City = "Warsaw",
-            CountryInfo = countryInfoDto,
             Email = "test@test.com",
             FirstName = "Andrzej",
             LastName = "Daniluk",
             Password = "Password@1234",
             PhoneNumber = "123456789",
-            State = "State",
-            Street = "Street",
-            ZipCode = "12345",
-            UserName = "Danilukson",
+            Address = GetExampleAddAddressDto()
+        };
+    }
+
+    private AddAddressDto GetExampleAddAddressDto()
+    {
+        return new AddAddressDto()
+        {
+            City = "Warsaw",
+            Country = GetExampleCountryInfoDto(),
+            State = "Lubelskie",
+            Street = "Random",
+            ZipCode = "08500"
+        };
+    }
+
+    private CountryInfoDto GetExampleCountryInfoDto()
+    {
+        return new CountryInfoDto()
+        {
+            ISO = "USA",
+            Name = "United States of America"
         };
     }
 

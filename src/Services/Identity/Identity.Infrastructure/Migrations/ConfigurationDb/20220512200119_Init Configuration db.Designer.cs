@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Identity.Infrastructure.Migrations
+namespace Identity.Infrastructure.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20220330183454_Init Configuration db")]
+    [Migration("20220512200119_Init Configuration db")]
     partial class InitConfigurationdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -9,9 +9,11 @@ using Identity.Application.DTO;
 using Identity.Application.DTO.RegisteringUser;
 using Identity.Application.Mappers;
 using Identity.Application.Mappers.UserMapper;
+using Identity.Application.Mappers.UserMapper.AddressMapper;
 using Identity.Application.Mappers.UserMapper.CountryInfoMapper;
 using Identity.Domain.AggregationModels.ApplicationUser;
-using Identity.Domain.AggregationModels.ApplicationUser.Child;
+using Identity.Domain.AggregationModels.ApplicationUser.Address;
+using Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -49,10 +51,12 @@ public static class ServicesConfiguration
     
     private static WebApplicationBuilder ConfigureServicesLifetime(this WebApplicationBuilder app)
     {
-        app.Services.AddScoped<IMapper<ApplicationUser, RegisterApplicationUserDto>, ApplicationUserMapper>();
-        app.Services.AddScoped<IMapper<CountryInfo, CountryInfoDto>, CountryInfoMapper>();
+        app.Services.AddScoped<IApplicationUserMapper, ApplicationUserMapper>();
+        app.Services.AddScoped<IAddressMapper, AddressMapper>();
+        app.Services.AddScoped<ICountryInfoMapper, CountryInfoMapper>();
         
         app.Services.AddScoped<ICountryRepository, CountryRepository>();
+        app.Services.AddScoped<IAddressRepository, AddressRepository>();
         
         return app;
     }
@@ -72,7 +76,7 @@ public static class ServicesConfiguration
 
     private static WebApplicationBuilder ConfigureIdentity(this WebApplicationBuilder app)
     {
-        app.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        app.Services.AddIdentity<ApplicationUserAggregateRoot, IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddDefaultTokenProviders();
         return app;
@@ -88,7 +92,7 @@ public static class ServicesConfiguration
                 x.UserInteraction.LogoutUrl = "/logout/";
             })
             .AddDeveloperSigningCredential()
-            .AddAspNetIdentity<ApplicationUser>()
+            .AddAspNetIdentity<ApplicationUserAggregateRoot>()
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseNpgsql(connectionString,
@@ -120,7 +124,7 @@ public static class ServicesConfiguration
             .AddFluentValidation(x => x.RegisterValidatorsFromAssemblies(new[]
             {
                 typeof(Program).Assembly,
-                typeof(ApplicationUser).Assembly
+                typeof(ApplicationUserAggregateRoot).Assembly
             }));
         return app;
     }
