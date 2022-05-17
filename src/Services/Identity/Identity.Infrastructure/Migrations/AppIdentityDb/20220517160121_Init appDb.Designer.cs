@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20220516180435_Init AppIdentityDb")]
-    partial class InitAppIdentityDb
+    [Migration("20220517160121_Init appDb")]
+    partial class InitappDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,8 +57,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId")
-                        .IsUnique();
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Addresses");
                 });
@@ -306,8 +305,8 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", b =>
                 {
                     b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo.CountryInfoAggregate", "Country")
-                        .WithOne()
-                        .HasForeignKey("Identity.Domain.AggregationModels.ApplicationUser.Address.AddressAggregate", "CountryId")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

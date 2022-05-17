@@ -38,4 +38,10 @@ public class AddressAggregate: BaseEntity
         
         new AddressValidator().ValidateAndThrow<AddressAggregate>(this);
     }
+
+    public void SetCountry(CountryInfoAggregate countryInfo)
+    {
+        Country = countryInfo ?? throw new ArgumentException(nameof(countryInfo));
+        CountryId = countryInfo.Id;
+    }
 }

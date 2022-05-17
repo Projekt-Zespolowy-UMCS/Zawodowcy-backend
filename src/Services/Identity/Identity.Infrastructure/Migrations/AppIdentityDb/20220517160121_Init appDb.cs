@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
-    public partial class InitAppIdentityDb : Migration
+    public partial class InitappDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -205,8 +205,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CountryId",
                 table: "Addresses",
-                column: "CountryId",
-                unique: true);
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

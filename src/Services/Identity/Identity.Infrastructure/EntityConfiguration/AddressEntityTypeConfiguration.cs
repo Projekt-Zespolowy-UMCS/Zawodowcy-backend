@@ -29,9 +29,8 @@ public class AddressEntityTypeConfiguration: IEntityTypeConfiguration<AddressAgg
 
         builder
             .HasOne(address => address.Country)
-            .WithOne()
-            .IsRequired(true);
-        
+            .WithMany()
+            .HasForeignKey(x => x.CountryId);
 
         // var navigation = builder.Metadata.FindNavigation(nameof(ApplicationUser.Country));
         // navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

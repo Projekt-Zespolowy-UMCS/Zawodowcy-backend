@@ -20,7 +20,12 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> AddUserAddressAsync(AddressAggregate address, string userId)
     {
-        var addedEntity = await _context.Addresses.AddAsync(address);
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        address.SetCountry(country);
+        _context.Entry(address.Country).State = EntityState.Detached;
+        _context.Entry(address).State = EntityState.Added;
+    
+        var addedEntity = _context.Addresses.Add(address);
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user is null)
             throw new ArgumentException($"There is no user with ID {userId}.");
@@ -32,7 +37,12 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> CreateAddressAsync(AddressAggregate address)
     {
-        var addedEntity = await _context.Addresses.AddAsync(address);
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        address.SetCountry(country);
+        _context.Entry(address.Country).State = EntityState.Detached;
+        _context.Entry(address).State = EntityState.Added;
+
+        var addedEntity = _context.Addresses.Add(address);
         await _context.SaveChangesAsync();
 
         return addedEntity.Entity;
@@ -40,6 +50,12 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> UpdateUserAddress(AddressAggregate address)
     {
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        address.SetCountry(country);
+        // _context.Entry(address.Country).State = EntityState.Unchanged;
+        _context.Entry(address.Country).State = EntityState.Detached;
+        _context.Entry(address).State = EntityState.Added;
+
         var updatedEntity = _context.Addresses.Update(address);
         await _context.SaveChangesAsync();
         return updatedEntity?.Entity;
