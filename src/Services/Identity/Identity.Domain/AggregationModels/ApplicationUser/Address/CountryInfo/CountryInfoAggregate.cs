@@ -3,7 +3,7 @@ using Identity.Domain.Base;
 
 namespace Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo;
 
-public class CountryInfoAggregate: BaseEntity
+public class CountryInfoAggregate
 {
     public string ISO { get; private set; }
     public string Name { get; private set; }

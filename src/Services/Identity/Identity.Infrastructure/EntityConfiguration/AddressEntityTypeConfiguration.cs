@@ -30,7 +30,7 @@ public class AddressEntityTypeConfiguration: IEntityTypeConfiguration<AddressAgg
         builder
             .HasOne(address => address.Country)
             .WithMany()
-            .HasForeignKey(x => x.CountryId);
+            .HasForeignKey(x => x.CountryISO);
 
         // var navigation = builder.Metadata.FindNavigation(nameof(ApplicationUser.Country));
         // navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

@@ -20,7 +20,7 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> AddUserAddressAsync(AddressAggregate address, string userId)
     {
-        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.ISO == address.Country.ISO);
         address.SetCountry(country);
         var addedEntity = _context.Addresses.Add(address);
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -34,7 +34,7 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> CreateAddressAsync(AddressAggregate address)
     {
-        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.ISO == address.Country.ISO);
         address.SetCountry(country);
         var addedEntity = _context.Addresses.Add(address);
         await _context.SaveChangesAsync();
@@ -44,7 +44,7 @@ public class AddressRepository: IAddressRepository
 
     public async Task<AddressAggregate> UpdateUserAddress(AddressAggregate address)
     {
-        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
+        var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.ISO == address.Country.ISO);
         address.SetCountry(country);
         var updatedEntity = _context.Addresses.Update(address);
         await _context.SaveChangesAsync();

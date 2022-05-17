@@ -19,11 +19,6 @@ public class CountryRepository : ICountryRepository
         return await _context.CountryInfos.ToListAsync();
     }
 
-    public async Task<CountryInfoAggregate?> GetAsync(int id)
-    {
-        return await _context.CountryInfos.FirstOrDefaultAsync(ctr => ctr.Id == id);
-    }
-
     public async Task<CountryInfoAggregate?> GetAsync(string iso)
     {
         return await _context.CountryInfos.FirstOrDefaultAsync(ctr => ctr.ISO == iso);

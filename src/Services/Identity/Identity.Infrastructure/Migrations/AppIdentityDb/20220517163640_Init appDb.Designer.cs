@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations.AppIdentityDb
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20220517160121_Init appDb")]
+    [Migration("20220517163640_Init appDb")]
     partial class InitappDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,8 +37,9 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer");
+                    b.Property<string>("CountryISO")
+                        .IsRequired()
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -57,21 +58,14 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryISO");
 
                     b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo.CountryInfoAggregate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<string>("ISO")
-                        .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
@@ -79,7 +73,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ISO");
 
                     b.ToTable("CountryInfos");
                 });
@@ -306,7 +300,7 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 {
                     b.HasOne("Identity.Domain.AggregationModels.ApplicationUser.Address.CountryInfo.CountryInfoAggregate", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId")
+                        .HasForeignKey("CountryISO")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

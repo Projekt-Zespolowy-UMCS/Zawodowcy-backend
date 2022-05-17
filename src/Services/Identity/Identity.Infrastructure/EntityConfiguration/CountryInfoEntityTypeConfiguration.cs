@@ -10,11 +10,14 @@ public class CountryInfoEntityTypeConfiguration: IEntityTypeConfiguration<Countr
     public void Configure(EntityTypeBuilder<CountryInfoAggregate> builder)
     {
         builder
-            .Property(info => info.Name)
-            .IsRequired(true);
-
+            .HasKey(info => info.ISO);
+        
         builder.Property(info => info.ISO)
-            .IsRequired(true)
+            .IsRequired()
             .HasMaxLength(3);
+        
+        builder
+            .Property(info => info.Name)
+            .IsRequired();
     }
 }

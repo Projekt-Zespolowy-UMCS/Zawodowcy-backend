@@ -9,7 +9,7 @@ public class AddressAggregate: BaseEntity
     public string Street { get; protected set; }
     public string City { get; protected set; }
     public string State { get; protected set; }
-    public int CountryId { get; protected set; }
+    public string CountryISO { get; protected set; }
     public CountryInfoAggregate Country { get; protected set; }
     public string ZipCode { get; protected set; }
     
@@ -42,6 +42,6 @@ public class AddressAggregate: BaseEntity
     public void SetCountry(CountryInfoAggregate countryInfo)
     {
         Country = countryInfo ?? throw new ArgumentException(nameof(countryInfo));
-        CountryId = countryInfo.Id;
+        CountryISO = countryInfo.ISO;
     }
 }

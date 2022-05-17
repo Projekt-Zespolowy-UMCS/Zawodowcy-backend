@@ -28,14 +28,12 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 name: "CountryInfos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ISO = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CountryInfos", x => x.Id);
+                    table.PrimaryKey("PK_CountryInfos", x => x.ISO);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,17 +66,17 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                     Street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     State = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    CountryId = table.Column<int>(type: "integer", nullable: false),
+                    CountryISO = table.Column<string>(type: "character varying(3)", nullable: false),
                     ZipCode = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Addresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Addresses_CountryInfos_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Addresses_CountryInfos_CountryISO",
+                        column: x => x.CountryISO,
                         principalTable: "CountryInfos",
-                        principalColumn: "Id",
+                        principalColumn: "ISO",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -203,9 +201,9 @@ namespace Identity.Infrastructure.Migrations.AppIdentityDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_CountryId",
+                name: "IX_Addresses_CountryISO",
                 table: "Addresses",
-                column: "CountryId");
+                column: "CountryISO");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
