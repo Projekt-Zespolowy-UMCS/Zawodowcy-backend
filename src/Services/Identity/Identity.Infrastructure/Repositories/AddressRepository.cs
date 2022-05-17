@@ -22,9 +22,6 @@ public class AddressRepository: IAddressRepository
     {
         var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
         address.SetCountry(country);
-        _context.Entry(address.Country).State = EntityState.Detached;
-        _context.Entry(address).State = EntityState.Added;
-    
         var addedEntity = _context.Addresses.Add(address);
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user is null)
@@ -39,9 +36,6 @@ public class AddressRepository: IAddressRepository
     {
         var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
         address.SetCountry(country);
-        _context.Entry(address.Country).State = EntityState.Detached;
-        _context.Entry(address).State = EntityState.Added;
-
         var addedEntity = _context.Addresses.Add(address);
         await _context.SaveChangesAsync();
 
@@ -52,10 +46,6 @@ public class AddressRepository: IAddressRepository
     {
         var country = await _context.CountryInfos.FirstOrDefaultAsync(x => x.Id == address.CountryId || x.ISO == address.Country.ISO);
         address.SetCountry(country);
-        // _context.Entry(address.Country).State = EntityState.Unchanged;
-        _context.Entry(address.Country).State = EntityState.Detached;
-        _context.Entry(address).State = EntityState.Added;
-
         var updatedEntity = _context.Addresses.Update(address);
         await _context.SaveChangesAsync();
         return updatedEntity?.Entity;
