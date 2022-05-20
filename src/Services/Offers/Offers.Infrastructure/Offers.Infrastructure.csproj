@@ -11,7 +11,14 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Offers.Domain\Offers.Domain.csproj" />
     </ItemGroup>
 
 </Project>
