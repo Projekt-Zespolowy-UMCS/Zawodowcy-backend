@@ -44,6 +44,7 @@ public static class ServicesConfiguration
             .ConfigureDbContext()
             .ConfigureIdentity()
             .ConfigureIdentityServer()
+            .ConfigureValidators()
             .AddEventBus()
             .ConfigureSpa();
         return app;

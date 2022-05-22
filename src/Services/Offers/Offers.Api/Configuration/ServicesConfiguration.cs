@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using Offers.Domain.AggregationModels.Offer;
 using Offers.Infrastructure.Data;
 
 namespace Offers.Api.Configuration;
@@ -13,8 +15,20 @@ public static class ServicesConfiguration
         connectionString = app.Configuration.GetConnectionString("OffersDb");
 
         app.ConfigureServicesLifetime()
-            .ConfigureDbContext();
+            .ConfigureDbContext()
+            .ConfigureValidators();
         
+        return app;
+    }
+    
+    private static WebApplicationBuilder ConfigureValidators(this WebApplicationBuilder app)
+    {
+        app.Services
+            .AddFluentValidation(x => x.RegisterValidatorsFromAssemblies(new[]
+            {
+                typeof(Program).Assembly,
+                typeof(OfferAggregateRoot).Assembly
+            }));
         return app;
     }
     
