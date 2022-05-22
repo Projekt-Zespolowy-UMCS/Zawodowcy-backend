@@ -3,6 +3,6 @@
 public static class ImageValidationConstants
 {
     public static int NameMinimumLength = 2;
-    public static int NameMaxinumLength = 100;
+    public static int NameMaximumLength = 100;
     
 }

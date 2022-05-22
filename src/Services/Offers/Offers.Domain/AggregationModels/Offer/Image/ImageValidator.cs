@@ -9,8 +9,8 @@ public class ImageValidator: AbstractValidator<ImageAggregate>
         RuleFor(x => x.Name)
             .MinimumLength(ImageValidationConstants.NameMinimumLength)
             .WithMessage($"Name is too short. It has to be minimum {ImageValidationConstants.NameMinimumLength} chars length.")
-            .MaximumLength(ImageValidationConstants.NameMaxinumLength)
-            .WithMessage($"Name is too short. It has to be maximum {ImageValidationConstants.NameMaxinumLength} chars length.");
+            .MaximumLength(ImageValidationConstants.NameMaximumLength)
+            .WithMessage($"Name is too short. It has to be maximum {ImageValidationConstants.NameMaximumLength} chars length.");
 
         RuleFor(x => x.AbsolutePath)
             .NotEmpty()
