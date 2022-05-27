@@ -17,8 +17,8 @@ env:
   IMAGE_REGISTRY_URL: docker.pkg.github.com
 
 jobs:
-  test:
-    name: Test project
+  test-identity:
+    name: Test identity microservice
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,12 +26,22 @@ jobs:
         run: |
           cd src/Services/Identity/Identity.Api
           dotnet test --no-restore --verbosity normal
+          
+  test-offers:
+    name: Test offers microservice
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test application
+        run: |
+          cd src/Services/Offers/Offers.Api
+          dotnet test --no-restore --verbosity normal
   
   build:
     name: Build application and deploy artifact to packages
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
-    needs: test
+    needs: [test-identity, test-offers]
     steps:
       - uses: actions/checkout@v2
 
