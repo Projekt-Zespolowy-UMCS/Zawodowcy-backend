@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using a;
+using Microsoft.EntityFrameworkCore;
 
 namespace Offers.Infrastructure.Data;
 
@@ -13,5 +14,10 @@ public class OffersDbContext: DbContext
     {
         base.OnModelCreating(modelBuilder);
         
+        modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MimeTypeEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ImageEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new OfferEntityConfiguration());
     }
 }
