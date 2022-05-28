@@ -13,6 +13,7 @@ public class ImageAggregate: BaseEntityUnique
     public int MimeTypeId { get; protected set; }
     public MimeTypeAggregate MimeType { get; protected set; }
     public int OfferId { get; protected set; }
+    public OfferAggregateRoot Offer { get; protected set; }
 
     protected ImageAggregate() {}
 }
