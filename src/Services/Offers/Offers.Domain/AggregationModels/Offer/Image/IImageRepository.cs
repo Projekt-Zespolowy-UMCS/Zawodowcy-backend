@@ -5,5 +5,5 @@ public interface IImageRepository
     public Task<ImageAggregate> AddImageAsync(ImageAggregate image);
     public Task<IList<ImageAggregate>> GetOfferImagesAsync(Guid offerId);
     public Task<ImageAggregate> UpdateImageAsync(ImageAggregate image);
-    public Task<bool> RemoveImageAsync(int id);
+    public Task<bool> RemoveImageAsync(Guid id);
 }
