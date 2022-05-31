@@ -1,6 +1,7 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Offers.Domain.AggregationModels.Offer;
+using Offers.Domain.AggregationModels.Offer.Category;
 using Offers.Domain.AggregationModels.Offer.Image.MimeType;
 using Offers.Infrastructure.Data;
 using Offers.Infrastructure.Repositories;
@@ -37,6 +38,7 @@ public static class ServicesConfiguration
     private static WebApplicationBuilder ConfigureServicesLifetime(this WebApplicationBuilder app)
     {
         app.Services.AddScoped<IMimeTypeRepository, MimeTypeRepository>();
+        app.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         
         return app;
     }
