@@ -22,12 +22,20 @@ public class LocationRepository: ILocationRepository
         return location;
     }
 
-    public async Task<IList<LocationAggregate>> GetAllLocationsAsync(PageConfiguration config)
+    public async Task<Pager<LocationAggregate>> GetAllLocationsAsync(PageConfiguration config)
     {
-        return await _context.Locations
+        var items = await _context.Locations
             .Skip(config.PageSize*config.Page)
             .Take(config.PageSize)
             .ToListAsync();
+
+        var itemsCount = await _context.Locations.CountAsync();
+
+        return new Pager<LocationAggregate>(
+            itemsCount,
+            config.Page,
+            config.PageSize,
+            items);
     }
 
     public async Task<IList<LocationAggregate>> GetLocationsWithNameAsync(string name)

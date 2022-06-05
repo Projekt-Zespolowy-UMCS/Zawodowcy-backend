@@ -43,6 +43,7 @@ public static class ServicesConfiguration
         app.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         app.Services.AddScoped<IImageRepository, ImageRepository>();
         app.Services.AddScoped<ILocationRepository, LocationRepository>();
+        app.Services.AddScoped<IOfferRepository, OfferRepository>();
         
         return app;
     }
