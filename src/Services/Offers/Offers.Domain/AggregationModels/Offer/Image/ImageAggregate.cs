@@ -1,4 +1,5 @@
-﻿using Offers.Domain.AggregationModels.Offer.Image.MimeType;
+﻿using FluentValidation;
+using Offers.Domain.AggregationModels.Offer.Image.MimeType;
 using Offers.Domain.Base;
 
 namespace Offers.Domain.AggregationModels.Offer.Image;
@@ -15,5 +16,17 @@ public class ImageAggregate: BaseEntityUnique
     public Guid OfferId { get; protected set; }
     public OfferAggregateRoot Offer { get; protected set; }
 
-    protected ImageAggregate() {}
+    public ImageAggregate(string name, string absolutePath, DateTime createdAt, DateTime? updatedAt, int mimeTypeId, MimeTypeAggregate mimeType, Guid offerId, OfferAggregateRoot offer)
+    {
+        Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentException(nameof(name)) : name;
+        AbsolutePath = string.IsNullOrWhiteSpace(absolutePath) ? throw new ArgumentException(nameof(absolutePath)) : absolutePath;
+        CreatedAt = createdAt == DateTime.MinValue ? throw new ArgumentException(nameof(createdAt)) : createdAt;
+        UpdatedAt = updatedAt == DateTime.MinValue ? throw new ArgumentException(nameof(updatedAt)) : updatedAt;
+        MimeTypeId = mimeTypeId == 0 ? throw new ArgumentException(nameof(mimeTypeId)) : mimeTypeId;
+        MimeType = mimeType ?? throw new ArgumentException(nameof(mimeType));
+        OfferId = offerId;
+        Offer = offer ?? throw new ArgumentException(nameof(offer));
+
+        new ImageValidator().ValidateAndThrow(this);
+    }
 }
