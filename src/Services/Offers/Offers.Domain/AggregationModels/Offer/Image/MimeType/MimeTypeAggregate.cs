@@ -7,6 +7,10 @@ public sealed class MimeTypeAggregate: BaseEntity
 {
     public string Type { get; private set; }
 
+    protected MimeTypeAggregate()
+    {
+    }
+    
     public MimeTypeAggregate(string type)
     {
         Type = string.IsNullOrWhiteSpace(type) ? throw new ArgumentException(nameof(Type)) : type;

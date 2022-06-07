@@ -1,4 +1,5 @@
-﻿using Offers.Domain.AggregationModels.Offer.Category;
+﻿using FluentValidation;
+using Offers.Domain.AggregationModels.Offer.Category;
 using Offers.Domain.AggregationModels.Offer.Image;
 using Offers.Domain.AggregationModels.Offer.Location;
 using Offers.Domain.Base;
@@ -22,6 +23,10 @@ public class OfferAggregateRoot: BaseEntityUnique
 
     public IList<ImageAggregate> Images { get; protected set; }
 
+    protected OfferAggregateRoot()
+    {
+    }
+    
     public OfferAggregateRoot(Guid authorId, string title, string content, DateTime createdAt, DateTime? updatedAt, 
     bool isArchival, CategoryAggregate category, int locationId, LocationAggregate location, IList<ImageAggregate> images)
     {
@@ -36,5 +41,7 @@ public class OfferAggregateRoot: BaseEntityUnique
         Location = location ?? throw new ArgumentException(nameof(location));
         LocationId = locationId;
         Images = images ?? throw new ArgumentException(nameof(images));
+        
+        new OfferValidator().ValidateAndThrow(this);
     }
 }

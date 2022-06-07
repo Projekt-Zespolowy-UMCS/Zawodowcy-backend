@@ -16,6 +16,10 @@ public class ImageAggregate: BaseEntityUnique
     public Guid OfferId { get; protected set; }
     public OfferAggregateRoot Offer { get; protected set; }
 
+    protected ImageAggregate()
+    {
+    }
+    
     public ImageAggregate(string name, string absolutePath, DateTime createdAt, DateTime? updatedAt, int mimeTypeId, MimeTypeAggregate mimeType, Guid offerId, OfferAggregateRoot offer)
     {
         Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentException(nameof(name)) : name;
