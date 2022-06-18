@@ -11,12 +11,12 @@ COPY "src/Services/Identity/Identity.Api/Identity.Api.csproj" "src/Services/Iden
 COPY "src/Services/Identity/Identity.Application/Identity.Application.csproj" "src/Services/Identity/Identity.Application/Identity.Application.csproj"
 COPY "src/Services/Identity/Identity.Domain/Identity.Domain.csproj" "src/Services/Identity/Identity.Domain/Identity.Domain.csproj"
 COPY "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj" "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj"
+COPY "/src/Services/Identity/Identity.Api/client-ui" "/app/client-ui"
 
 RUN dotnet restore "Zawodowcy.sln"
 
 COPY . .
 WORKDIR /src/Services/Identity/Identity.Api
-COPY /src/Services/Identity/Identity.Api/client-ui /app/client-ui
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash && \
     apt-get install -y nodejs && \
