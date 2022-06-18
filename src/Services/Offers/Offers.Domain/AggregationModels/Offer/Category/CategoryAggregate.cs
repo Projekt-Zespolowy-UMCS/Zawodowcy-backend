@@ -6,5 +6,12 @@ public class CategoryAggregate: BaseEntity
 {
     public string Name { get; protected set; }
 
-    protected CategoryAggregate() {}
+    protected CategoryAggregate()
+    {
+    }
+    
+    public CategoryAggregate(string name)
+    {
+        Name = name;
+    }
 }

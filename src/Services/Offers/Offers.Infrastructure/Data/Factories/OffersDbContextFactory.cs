@@ -13,12 +13,12 @@ public class OffersDbContextFactory: IDesignTimeDbContextFactory<OffersDbContext
         
         var config = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(configPath))
-            .AddJsonFile("Identity.Api/appsettings.Development.json")
+            .AddJsonFile("Offers.Api/appsettings.Development.json")
             .AddEnvironmentVariables()
             .Build();
         
         var optionsBuilder = new DbContextOptionsBuilder<OffersDbContext>()
-            .UseNpgsql(config.GetConnectionString("IdentityDb"), options => options.MigrationsAssembly("Identity.Infrastructure"));
+            .UseNpgsql(config.GetConnectionString("OffersDb"), options => options.MigrationsAssembly("Offers.Infrastructure"));
         return new OffersDbContext(optionsBuilder.Options);
     }
 }
