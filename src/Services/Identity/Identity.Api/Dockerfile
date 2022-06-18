@@ -22,7 +22,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
     cd client-ui && npm install react-scripts && \
     npm install -g npm && npm install && cd .. &&  \
     dotnet build && dotnet publish --no-restore -c Release -o /app
-COPY /src/Services/Identity/Identity.Api/client-ui /app/client-ui
+COPY src/Services/Identity/Identity.Api/client-ui app/client-ui
 FROM build AS publish
 
 FROM publish AS final
