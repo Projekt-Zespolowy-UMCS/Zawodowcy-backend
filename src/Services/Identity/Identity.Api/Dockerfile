@@ -11,7 +11,6 @@ COPY "src/Services/Identity/Identity.Api/Identity.Api.csproj" "src/Services/Iden
 COPY "src/Services/Identity/Identity.Application/Identity.Application.csproj" "src/Services/Identity/Identity.Application/Identity.Application.csproj"
 COPY "src/Services/Identity/Identity.Domain/Identity.Domain.csproj" "src/Services/Identity/Identity.Domain/Identity.Domain.csproj"
 COPY "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj" "src/Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj"
-COPY "src/Services/Identity/Identity.Api/client-ui" "app/client-ui"
 
 RUN dotnet restore "Zawodowcy.sln"
 
